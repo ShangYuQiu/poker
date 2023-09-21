@@ -8,6 +8,12 @@ package control.commands;
  *
  * @author shangyu
  */
-public class apartado1 {
-    
+public class Apartado1 {
+    private String carta;
+    public Apartado1(String carta){
+        this.carta=carta;
+    }
+    public void execute(){
+        System.out.println(carta);
+    }
 }
