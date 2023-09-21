@@ -14,13 +14,18 @@ import java.util.*;
 public class Mano {
  
  
-    private ArrayList <Carta> cartas ;
+    private List <Carta> cartas ;
      /*
     Crear objetos de las clases comprobaciones 
  
     
     
     */
+
+
+     public Mano (){
+        cartas = new SortedArrayList<Carta>();
+    }
     public void aaa(){
     //Collections.sort(cartas);
    
