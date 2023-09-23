@@ -14,7 +14,15 @@ public class Carta implements Comparable<Carta>{
     private String palo;
     private String valor;
     
+    public Carta ( String v , String p){
+        
+        valor =v;
+        palo = p;
+    }
     
+    private void conv (){
+    
+    }
     public int getNum(){
     return numero;
     }
