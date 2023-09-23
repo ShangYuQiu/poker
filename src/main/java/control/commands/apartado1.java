@@ -19,10 +19,11 @@ public class Apartado1 {
     
     private String entrada;
     private Mano mano;
+    private String salida;
     
     public Apartado1(String entra , String sal){
         this.entrada=entra;
-        
+        this.salida = sal;
         
     }
     
