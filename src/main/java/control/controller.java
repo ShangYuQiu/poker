@@ -31,7 +31,16 @@ public class Controller {
                         FileInputStream fis = new FileInputStream(f);
 			InputStreamReader fr = new InputStreamReader(fis);
 	        	BufferedReader in = new BufferedReader(fr);
-	        	carta=in.readLine();
+	        	while ( (carta=in.readLine()) != null){
+                        
+                            Mano mano = new Mano ();
+                            for (int i = 0; i < carta.length(); i+=2){
+                            // no se si esta bien
+                                 Carta c = new Carta (carta.substring(i,i+1), carta.substring(i+1,i+2));
+                                 mano.anniadirCart(c);
+                            }
+                        
+                        }
                         
         }catch(Exception e){ 
             e.printStackTrace();
