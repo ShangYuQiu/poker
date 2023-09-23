@@ -19,20 +19,18 @@ import objects.Carta;
  */
 public class Controller {
     
-    private int nivel;
     private String entrada;
     private String salida;
     private String carta;
     
     
-    public Controller(int nivel,String entrada,String salida){
+    public Controller(String entrada,String salida){
         
-        this.nivel=nivel;
         this.entrada=entrada;
         this.salida=salida;
     }
 
-    public void run(){
+    public void run(int nivel){
         
         switch (nivel) {
             case 1:
