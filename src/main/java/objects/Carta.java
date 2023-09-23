@@ -18,10 +18,36 @@ public class Carta implements Comparable<Carta>{
         
         valor =v;
         palo = p;
+        conv();
     }
     
     private void conv (){
-    
+        
+        switch (valor){
+            
+            case "A":
+                numero = 14;
+                break;
+            case "K":
+                numero = 13;
+            break;
+                
+            case "Q":
+                numero = 12;
+            break;
+            
+            case "J":
+                numero = 11;
+            break;
+            
+            case "T":
+                numero = 13;
+            break;
+            
+            default:
+                break;
+                
+        }
     }
     public int getNum(){
     return numero;
