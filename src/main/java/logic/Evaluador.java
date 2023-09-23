@@ -13,6 +13,7 @@ public class Evaluador {
 
     private Mano _mano;
     private ArrayList<String> draw;
+    private String best;
     
     public Evaluador(Mano mano){
         _mano = mano;
