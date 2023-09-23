@@ -13,21 +13,22 @@ import java.util.*;
  */
 public class Mano {
  
-    private String id;
+     private String id;
     private List <Carta> cartas ;
-     /*
-    Crear objetos de las clases comprobaciones 
- 
-    
-    
-    */
 
-
-     public Mano (){
+    
+    public Mano (){
         cartas = new SortedArrayList<Carta>();
     }
-    public void aaa(){
-    //Collections.sort(cartas);
-   
+    
+    
+    public void anniadirCart(Carta c){
+        
+        cartas.add(c);
+    }
+    
+    public List <Carta> getCartas(){
+    
+        return cartas;
     }
 }
