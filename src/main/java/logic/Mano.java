@@ -13,7 +13,7 @@ import java.util.*;
  */
 public class Mano {
  
- 
+    private String id;
     private List <Carta> cartas ;
      /*
     Crear objetos de las clases comprobaciones 
