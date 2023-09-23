@@ -10,7 +10,7 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import control.commands.Apartado1;
+import control.commands.apartado1;
 /**
  *
  * @author shangyu
