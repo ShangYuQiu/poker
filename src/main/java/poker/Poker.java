@@ -10,23 +10,19 @@ import control.controller;
  */
 public class Poker {
     
-    private static void cargar2(String entrada){
-	        
-	 }
-    private static void cargar3(String entrada){
-	        
-	 }
     public static void main(String[] args) {
         
+        Controller controller=new Controller(args[1],args[2]);
+        
         if(args[0].equalsIgnoreCase("1")){
-            Controller controller=new Controller(1,args[1],args[2]);
-            controller.run();
+            
+            controller.run(1);
         }
         else if(args[0].equalsIgnoreCase("2")){
-             cargar2(args[1]);
+             controller.run(2);
         }
         else if(args[0].equalsIgnoreCase("3")){
-             cargar3(args[1]);
+             controller.run(3);
         }
     }
 }
