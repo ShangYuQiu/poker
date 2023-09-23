@@ -21,8 +21,6 @@ public class Controller {
     
     private String entrada;
     private String salida;
-    private String carta;
-    
     
     public Controller(String entrada,String salida){
         
