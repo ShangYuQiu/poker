@@ -1,18 +1,9 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package logic;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 
-/**
- *
- * @author shangyu
- * @param <E>
- */
 public class SortedArrayList<E> extends ArrayList<E> {
  
     private Comparator<E> _cmp;
