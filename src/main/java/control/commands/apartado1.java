@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
-import logic.Mano;
+import objects.Mano;
 import objects.Carta;
 
 public class Apartado1 {

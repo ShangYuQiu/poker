@@ -1,5 +1,7 @@
 package objects;
 
+import logic.Palo;
+
 
 public class Carta implements Comparable<Carta> {
 
@@ -47,15 +49,19 @@ public class Carta implements Comparable<Carta> {
     }
 
     @Override
-    public int compareTo(Carta c) {
+    public int compareTo(Carta o) {
 
-        if (this.valor < c.getVal()) {
-            return -1;
-        } else if (this.valor == c.getVal()) {
-            return 0;
-        } else {
-            return 1;
-        }
+//        //Orden ascendente
+//        if (this.valor < o.getVal()) {
+//            return -1;
+//        } else if (this.valor == o.getVal()) {
+//            return 0;
+//        } else {
+//            return 1;
+//        }
+        
+        //Orden descendente
+        return o.getVal() - this.valor;
     }
 
 }
