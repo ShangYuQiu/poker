@@ -34,7 +34,15 @@ public class Evaluador {
     
         boolean b = false;
         
+        int i = 0;
         
+        while ( i < c.size()-1 && b){
+            
+            if ( c.get(i).getPalo() != c.get(i+1).getPalo()){
+                b = false;
+            }
+            i++;
+        }
         return b;
     }
     
