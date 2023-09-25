@@ -37,6 +37,7 @@ public class Apartado1 {
                     Carta c = new Carta(carta.substring(i, i + 1), carta.substring(i + 1, i + 2));
                     m.anniadirCart(c);
                 }
+                m.ordenar();
                 //salida
                 System.out.println(m.toString());
             	

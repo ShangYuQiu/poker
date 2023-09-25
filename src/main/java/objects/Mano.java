@@ -22,7 +22,9 @@ public class Mano {
     public List<Carta> getCartas() {
         return cartas;
     } 
-    
+    public void ordenar() {
+    	Collections.sort(cartas);
+    }
     @Override
     public String toString(){
         //Imprime por ejemplo "AhAcTh.."
