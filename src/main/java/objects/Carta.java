@@ -47,7 +47,7 @@ public class Carta implements Comparable<Carta> {
                 
         }
         */
-        try{
+        /*try{
 	    	if(simbolo.equals("A")) {
 	    		valor=14;
 	    	}
@@ -68,7 +68,35 @@ public class Carta implements Comparable<Carta> {
 	    	}
     	}catch(NumberFormatException e) {
     		System.out.println(e);
+    	}*/
+
+	       try{
+            valor = switch (simbolo) {
+                case "A" -> 14;
+                case "K" -> 13;
+                case "Q" -> 12;
+                case "J" -> 11;
+                case "T" -> 10;
+                default -> Integer.parseInt(simbolo);
+            };
+    	}catch(NumberFormatException e) {
+    		System.out.println(e);
     	}
+        
+        try{
+            switch(pal){
+            case "h" -> palo = Palo.HEARTS;
+            case "d" -> palo = Palo.DIAMONDS;
+                
+            case "c" -> palo = Palo.CLUBS;
+            case "s" -> palo = Palo.SPADES;
+                
+            }
+        }
+        
+        catch(Exception e){
+            System.out.println(e);
+        }
     }
 
     public int getVal() {
