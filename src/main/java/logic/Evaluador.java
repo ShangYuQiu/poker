@@ -27,10 +27,10 @@ public class Evaluador {
     */
     //Metodo que busca la mejor jugada posible de las cartas inciales, e busca posibles jugadas(DRAW)
     public void evaluar() {
-
+        List<Carta> c = _mano.getCartas();
     }
 
-    private boolean esTodomismoPalo(){
+    private boolean esTodomismoPalo(List <Carta> c){
     
         boolean b = false;
         
