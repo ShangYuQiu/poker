@@ -17,7 +17,7 @@ public class Carta implements Comparable<Carta> {
     }
 
     private void init() {
-
+        /* 
         switch (simbolo) {
 
             case "A" ->
@@ -46,6 +46,29 @@ public class Carta implements Comparable<Carta> {
             case "s" -> palo = Palo.SPADES;
                 
         }
+        */
+        try{
+	    	if(simbolo.equals("A")) {
+	    		valor=14;
+	    	}
+	    	else if(simbolo.equals("K")) {
+	    		valor=13;
+	    	}
+	    	else if(simbolo.equals("Q")) {
+	    		valor=12;
+	    	}
+	    	else if(simbolo.equals("J")) {
+	    		valor=11;
+	    	}
+	    	else if(simbolo.equals("T")) {
+	    		valor=10;
+	    	}
+	    	else {
+	    		valor=Integer.parseInt(simbolo);
+	    	}
+    	}catch(NumberFormatException e) {
+    		System.out.println(e);
+    	}
     }
 
     public int getVal() {
@@ -53,7 +76,9 @@ public class Carta implements Comparable<Carta> {
     }
 
     public String getPalo() {
-        return palo.toString();
+
+        //return palo.toString();
+        return pal;
     }
 
     public String getSimb() {

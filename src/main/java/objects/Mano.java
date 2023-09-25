@@ -2,6 +2,7 @@ package objects;
 
 import java.util.*;
 import logic.Jugada;
+import logic.SortedArrayList;
 
 //Representa una posible jugadas de todas las cartas
 public class Mano {
@@ -11,7 +12,7 @@ public class Mano {
 
     public Mano() {
         cartas = new SortedArrayList<Carta>();
-        this.jugada = jugada;
+        //this.jugada = jugada;
     }
 
     public void anniadirCart(Carta c){
@@ -25,7 +26,13 @@ public class Mano {
     @Override
     public String toString(){
         //Imprime por ejemplo "AhAcTh.."
-        return null;
+        String a="";
+    	for(Carta l:cartas) {
+    		
+    		a+=l.getVal();
+    		a+=l.getPalo();
+    	}
+        return a;
     }
     
 }
