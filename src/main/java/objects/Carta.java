@@ -34,6 +34,8 @@ public class Carta implements Comparable<Carta> {
             case "T" ->
                 valor = 10;
 
+            default -> Integer.parseInt(simbolo);
+
         }
 
         switch(pal){
