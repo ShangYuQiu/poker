@@ -5,7 +5,7 @@ import logic.Palo;
 
 public class Carta implements Comparable<Carta> {
 
-    private final String simbolo; //El simbolo representativo de la carta A, K, Q ...
+    private String simbolo; //El simbolo representativo de la carta A, K, Q ...
     private Palo palo;
     private int valor; //Valor real representativo
     private String pal;
