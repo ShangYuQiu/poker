@@ -6,12 +6,13 @@ import logic.Palo;
 public class Carta implements Comparable<Carta> {
 
     private final String simbolo; //El simbolo representativo de la carta A, K, Q ...
-    private final Palo palo;
+    private Palo palo;
     private int valor; //Valor real representativo
-
-    public Carta(String s, Palo p) {
+    private String pal;
+    
+    public Carta(String s, String p) {
         this.simbolo = s;
-        this.palo = p;
+        this.pal = p;
         init();
     }
 
@@ -33,6 +34,15 @@ public class Carta implements Comparable<Carta> {
             case "T" ->
                 valor = 10;
 
+        }
+
+        switch(pal){
+            case "h" -> palo = Palo.HEARTS;
+            case "d" -> palo = Palo.DIAMONDS;
+                
+            case "c" -> palo = Palo.CLUBS;
+            case "s" -> palo = Palo.SPADES;
+                
         }
     }
 
