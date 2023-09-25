@@ -10,7 +10,7 @@ public class Mano {
     private Jugada jugada;
 
     public Mano(List<Carta> cartas, Jugada jugada) {
-        this.cartas = new ArrayList<>(cartas);
+        cartas = new SortedArrayList<Carta>();
         this.jugada = jugada;
     }
 
