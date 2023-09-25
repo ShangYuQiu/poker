@@ -9,11 +9,15 @@ public class Mano {
     private List<Carta> cartas; 
     private Jugada jugada;
 
-    public Mano(List<Carta> cartas, Jugada jugada) {
+    public Mano() {
         cartas = new SortedArrayList<Carta>();
         this.jugada = jugada;
     }
 
+    public void anniadirCart(Carta c){
+        
+        cartas.add(c);
+    }
     public List<Carta> getCartas() {
         return cartas;
     } 
