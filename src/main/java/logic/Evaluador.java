@@ -24,8 +24,30 @@ public class Evaluador {
 
     }
 
+    private boolean esTodomismoPalo(){
+    
+        boolean b = false;
+        
+        
+        return b;
+    }
+    
+    private boolean esEscalera(){
+        boolean b = false;
+        
+        
+        return b;
+    }
+    
+    private boolean esPoker(){
+        boolean b = false;
+        
+        
+        return b;
+    }
+    
     //Metodo de busca formar una pareja entre las cartas
-    boolean pair() {
+   private boolean pair() {
 
         return false;
     }
