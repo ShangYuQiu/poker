@@ -2,14 +2,13 @@ package objects;
 
 import logic.Palo;
 
-
 public class Carta implements Comparable<Carta> {
 
     private String simbolo; //El simbolo representativo de la carta A, K, Q ...
     private Palo palo;
     private int valor; //Valor real representativo
     private String pal;
-    
+
     public Carta(String s, String p) {
         this.simbolo = s;
         this.pal = p;
@@ -46,8 +45,8 @@ public class Carta implements Comparable<Carta> {
             case "s" -> palo = Palo.SPADES;
                 
         }
-        */
-        /*try{
+         */
+ /*try{
 	    	if(simbolo.equals("A")) {
 	    		valor=14;
 	    	}
@@ -70,31 +69,39 @@ public class Carta implements Comparable<Carta> {
     		System.out.println(e);
     	}*/
 
-	       try{
+        try {
             valor = switch (simbolo) {
-                case "A" -> 14;
-                case "K" -> 13;
-                case "Q" -> 12;
-                case "J" -> 11;
-                case "T" -> 10;
-                default -> Integer.parseInt(simbolo);
+                case "A" ->
+                    14;
+                case "K" ->
+                    13;
+                case "Q" ->
+                    12;
+                case "J" ->
+                    11;
+                case "T" ->
+                    10;
+                default ->
+                    Integer.parseInt(simbolo);
             };
-    	}catch(NumberFormatException e) {
-    		System.out.println(e);
-    	}
-        
-        try{
-            switch(pal){
-            case "h" -> palo = Palo.HEARTS;
-            case "d" -> palo = Palo.DIAMONDS;
-                
-            case "c" -> palo = Palo.CLUBS;
-            case "s" -> palo = Palo.SPADES;
-                
-            }
+        } catch (NumberFormatException e) {
+            System.out.println(e);
         }
-        
-        catch(Exception e){
+
+        try {
+            switch (pal) {
+                case "h" ->
+                    palo = Palo.HEARTS;
+                case "d" ->
+                    palo = Palo.DIAMONDS;
+
+                case "c" ->
+                    palo = Palo.CLUBS;
+                case "s" ->
+                    palo = Palo.SPADES;
+
+            }
+        } catch (Exception e) {
             System.out.println(e);
         }
     }
@@ -124,7 +131,6 @@ public class Carta implements Comparable<Carta> {
 //        } else {
 //            return 1;
 //        }
-        
         //Orden descendente
         return o.getVal() - this.valor;
     }
