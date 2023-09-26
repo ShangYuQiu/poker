@@ -9,6 +9,7 @@ public class Mano {
     private List<Carta> cartas;   //Cartas de la mano
     private tJugada mejorJugada;  //Mejor jugada de la mano
     private String descripcion;   //Descripcion de la mejor jugada
+    private ArrayList<String> draws; //Mensajes explicativos de los posibles draws
 
     public Mano() {
         cartas = new SortedArrayList<>(); //Las cartas se ordenan automaticamente en funcion de su valor

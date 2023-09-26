@@ -56,7 +56,8 @@ public class Evaluador {
 
     /*--------------------------------------------------------------------------------------------------*/
 
- /*-- METODOS PARA COMPROBAR SI CON LA MANO ACTUAL SE PUEDA FORMAR ALGUNAS DE LAS JUGADAS DEL POKER--*/
+
+    /*-- METODOS PARA COMPROBAR SI CON LA MANO ACTUAL SE PUEDA FORMAR ALGUNAS DE LAS JUGADAS DEL POKER--*/
     private boolean esEscaleraColor(List<Carta> c) {
         return esEscalera(c) && esMismoPalo(c);
     }
@@ -65,16 +66,18 @@ public class Evaluador {
         boolean b = true;
 
         int i = 0;
-        while (i < c.size() - 1 && b
-                ) {
+        while (i < c.size() - 1 && b) {
             if (abs(c.get(i).getVal() - c.get(i + 1).getVal()) != 1) {
                 b = false;
             }
             i++;
         }
 
+        //openended 
+        // gutshot
+        //5 4 3 2 A
         //Caso especial, vamos a ver si podemos formar escalera colacando A al final
-        if (c.get(0).getSimb().equals("A")) {
+        /*if (c.get(0).getSimb().equals("A")) {
             Carta A = c.get(0);
             c.remove(A);
             c.add(A);
@@ -82,13 +85,12 @@ public class Evaluador {
             b = true;
             i = 0;
             while (i < c.size() - 1 && b) {
-                if (abs(c.get(i).getVal() - c.get(i + 1).getVal()) != 1) {
+                if (abs(c.get(i).getNum() - c.get(i + 1).getNum()) != 1) {
                     b = false;
                 }
                 i++;
             }
-        }
-
+        }*/
         //TODO: Pendiente de comprobar si se forma draws
         return b;
     }
@@ -137,7 +139,9 @@ public class Evaluador {
     }
 
     private boolean esFlush(List<Carta> c) {
-        return esMismoPalo(c);
+
+        //draw
+        return false;
         //TODO: pendiente comprobar si se forma draws
     }
 
