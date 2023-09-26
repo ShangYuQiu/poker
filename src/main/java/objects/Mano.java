@@ -9,6 +9,7 @@ public class Mano {
 
     private List<Carta> cartas; 
     private Jugada jugada;
+    private ArrayList <String> draw;
 
     public Mano() {
         cartas = new SortedArrayList<Carta>();
