@@ -1,40 +1,35 @@
 package objects;
 
 import java.util.*;
-import logic.Jugada;
+import logic.tJugada;
 import logic.SortedArrayList;
 
-//Representa una posible jugadas de todas las cartas
 public class Mano {
 
-    private List<Carta> cartas; 
-    private Jugada jugada;
+    private List<Carta> cartas;   //Cartas de la mano
+    private tJugada mejorJugada;  //Mejor jugada de la mano
+    private String descripcion;   //Descripcion de la mejor jugada
 
     public Mano() {
-        cartas = new SortedArrayList<Carta>();
-        //this.jugada = jugada;
+        cartas = new SortedArrayList<>(); //Las cartas se ordenan automaticamente en funcion de su valor
+        this.mejorJugada = null;
+        this.descripcion = null;
     }
 
-    public void anniadirCart(Carta c){
-        
+    //Getters y Setters
+    public void agregarCarta(Carta c) {
         cartas.add(c);
     }
+
     public List<Carta> getCartas() {
+        Collections.sort(cartas);
         return cartas;
-    } 
-    public void ordenar() {
-    	Collections.sort(cartas);
     }
+
     @Override
-    public String toString(){
-        //Imprime por ejemplo "AhAcTh.."
-        String a="";
-    	for(Carta l:cartas) {
-    		
-    		a+=l.getVal();
-    		a+=l.getPalo();
-    	}
-        return a;
+    //Imprime la mejor jugada que se puede formar con esta mano
+    public String toString() {
+        return mejorJugada.toString();
     }
-    
+
 }

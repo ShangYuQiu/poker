@@ -10,8 +10,7 @@ import objects.Mano;
 public class Evaluador {
 
     //private List<Carta> cartas; //Cartas iniciales
-    private ArrayList<Mano> posiblesManos; //Lista de posibles jugadas 
-    private Mano mejorMano; //Mejor jugada hasta el momento
+    private ArrayList<tJugada> posiblesManos; //Lista de posibles jugadas 
     private Mano _mano;
 
     public Evaluador(Mano mano) {
@@ -30,7 +29,7 @@ public class Evaluador {
         boolean mismoPalo = true;
         int i = 0;
 
-        while (i < c.size() - 1 && b) {
+        while (i < c.size() - 1 && mismoPalo) {
 
             if (!c.get(i).getPalo().equals(c.get(i + 1).getPalo())) {
                 mismoPalo = false;
@@ -66,7 +65,8 @@ public class Evaluador {
         boolean b = true;
 
         int i = 0;
-        while (i < c.size() - 1 && b) {
+        while (i < c.size() - 1 && b
+                ) {
             if (abs(c.get(i).getVal() - c.get(i + 1).getVal()) != 1) {
                 b = false;
             }

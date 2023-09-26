@@ -1,125 +1,55 @@
 package objects;
 
-import logic.Palo;
-
 public class Carta implements Comparable<Carta> {
 
-    private String simbolo; //El simbolo representativo de la carta A, K, Q ...
-    private Palo palo;
+    private final String simbolo; //El simbolo representativo de la carta A, K, Q ...
+    private final String palo; //Representa el palo al que pertenece la carta
     private int valor; //Valor real representativo
-    private String pal;
 
-    public Carta(String s, String p) {
-        this.simbolo = s;
-        this.pal = p;
-        init();
+    public Carta(String simbolo, String palo) {
+        this.simbolo = simbolo;
+        this.palo = palo;
+        init(); //Parsea la carta a su valor real referencial
     }
 
+    //Metodos auxiliares
+    //Parsea la carta en un valor numerico de referencia
     private void init() {
-        /* 
-        switch (simbolo) {
-
-            case "A" ->
-                valor = 14;
-            case "K" ->
-                valor = 13;
-
-            case "Q" ->
-                valor = 12;
-
-            case "J" ->
-                valor = 11;
-
-            case "T" ->
-                valor = 10;
-
-            default -> Integer.parseInt(simbolo);
-
-        }
-
-        switch(pal){
-            case "h" -> palo = Palo.HEARTS;
-            case "d" -> palo = Palo.DIAMONDS;
-                
-            case "c" -> palo = Palo.CLUBS;
-            case "s" -> palo = Palo.SPADES;
-                
-        }
-         */
- /*try{
-	    	if(simbolo.equals("A")) {
-	    		valor=14;
-	    	}
-	    	else if(simbolo.equals("K")) {
-	    		valor=13;
-	    	}
-	    	else if(simbolo.equals("Q")) {
-	    		valor=12;
-	    	}
-	    	else if(simbolo.equals("J")) {
-	    		valor=11;
-	    	}
-	    	else if(simbolo.equals("T")) {
-	    		valor=10;
-	    	}
-	    	else {
-	    		valor=Integer.parseInt(simbolo);
-	    	}
-    	}catch(NumberFormatException e) {
-    		System.out.println(e);
-    	}*/
-
         try {
-            valor = switch (simbolo) {
+            switch (simbolo) {
                 case "A" ->
-                    14;
+                    valor = 14;
                 case "K" ->
-                    13;
+                    valor = 13;
                 case "Q" ->
-                    12;
+                    valor = 12;
                 case "J" ->
-                    11;
+                    valor = 11;
                 case "T" ->
-                    10;
+                    valor = 10;
                 default ->
-                    Integer.parseInt(simbolo);
-            };
+                    valor = Integer.parseInt(simbolo);
+            }
         } catch (NumberFormatException e) {
             System.out.println(e);
         }
-
-        try {
-            switch (pal) {
-                case "h" ->
-                    palo = Palo.HEARTS;
-                case "d" ->
-                    palo = Palo.DIAMONDS;
-
-                case "c" ->
-                    palo = Palo.CLUBS;
-                case "s" ->
-                    palo = Palo.SPADES;
-
-            }
-        } catch (Exception e) {
-            System.out.println(e);
-        }
     }
 
+    
+    //Getters y Setters
     public int getVal() {
         return valor;
     }
 
     public String getPalo() {
-
-        //return palo.toString();
-        return pal;
+        return palo;
     }
 
     public String getSimb() {
         return simbolo;
     }
 
+    
     @Override
     public int compareTo(Carta o) {
 
