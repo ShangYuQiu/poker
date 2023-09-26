@@ -62,19 +62,62 @@ public class Evaluador {
         return esEscalera(c) && esMismoPalo(c);
     }
 
+
+    private boolean esMismoPalo(List<Carta> c) {
+
+        boolean mismoPalo = true;
+        int i = 0;
+
+        while (i < c.size() - 1 && mismoPalo) {
+
+            if (!c.get(i).getPalo().equals(c.get(i + 1).getPalo())) {
+                mismoPalo = false;
+            }
+            i++;
+        }
+        return mismoPalo;
+    }
+
+    //Metodo para comprobar que todas las cartas son del mismo valor independientemente del palo
+    private boolean esMismoValor(List<Carta> c) {
+        boolean mismoValor = true;
+
+        int i = 1;
+        int primValor = c.get(0).getNum();
+        while (i < c.size()) {
+            if (primValor != c.get(i).getNum()) {
+                mismoValor = false;
+            }
+        }
+
+        return mismoValor;
+    }
+
+    /*--------------------------------------------------------------------------------------------------*/
+
+ /*-- METODOS PARA COMPROBAR SI CON LA MANO ACTUAL SE PUEDA FORMAR ALGUNAS DE LAS JUGADAS DEL POKER--*/
+    private boolean esEscaleraColor(List<Carta> c) {
+        return esEscalera(c) && esMismoPalo(c);
+    }
+
     private boolean esEscalera(List<Carta> c) {
         boolean b = true;
 
         int i = 0;
         while (i < c.size() - 1 && b) {
-            if (abs(c.get(i).getVal() - c.get(i + 1).getVal()) != 1) {
+            if (abs(c.get(i).getNum() - c.get(i + 1).getNum()) != 1) {
                 b = false;
             }
             i++;
         }
-
+        
+        //openended 
+        
+        // gutshot
+        
+        //5 4 3 2 A
         //Caso especial, vamos a ver si podemos formar escalera colacando A al final
-        if (c.get(0).getSimb().equals("A")) {
+        /*if (c.get(0).getSimb().equals("A")) {
             Carta A = c.get(0);
             c.remove(A);
             c.add(A);
@@ -82,12 +125,12 @@ public class Evaluador {
             b = true;
             i = 0;
             while (i < c.size() - 1 && b) {
-                if (abs(c.get(i).getVal() - c.get(i + 1).getVal()) != 1) {
+                if (abs(c.get(i).getNum() - c.get(i + 1).getNum()) != 1) {
                     b = false;
                 }
                 i++;
             }
-        }
+        }*/
 
         //TODO: Pendiente de comprobar si se forma draws
         return b;
@@ -136,8 +179,13 @@ public class Evaluador {
         return fullHouse;
     }
 
+
     private boolean esFlush(List<Carta> c) {
-        return esMismoPalo(c);
+        
+        //draw
+        
+        
+        return false;
         //TODO: pendiente comprobar si se forma draws
     }
 
