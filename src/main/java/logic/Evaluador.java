@@ -64,7 +64,7 @@ public class Evaluador {
 
     private Jugada esEscalera() {
         Jugada j = null;
-        Mano //Caso especial, vamos a ver si podemos formar escalera colacando A al final
+        //Mano //Caso especial, vamos a ver si podemos formar escalera colacando A al final
                 /*if (c.get(0).getSimb().equals("A")) {
             Carta A = c.get(0);
             c.remove(A);
@@ -123,10 +123,41 @@ public class Evaluador {
     }
 
     private boolean esFlush(List<Carta> c) {
+        
+        // contadores de 4 palos
+        int contH = 0;
+        int contD = 0;
+        int contC = 0;
+        int contS = 0;
+        
+        
+        for ( int i = 0; i < c.size(); i++){ //recorre la lista
+        
+            switch ( c.get(i).getPalo()){
+            
+                case "HEARTS" -> contH++;
+                
+                case "DIAMONDS" -> contD++;
+                
+                case "CLUBS" -> contC++;
+                    
+                case "SPADES" -> contS++;
+                 
+            }
+        }
+        
+        if ( contH == 4 || contD == 4 || contC == 4 || contS == 4) { // comprobar si hay draw de flush
+            
+            return "-Draw : Flush";
+        }
+        
+        else if (contH > 4 || contD > 4 || contC > 4 || contS > 4){ // comprobar si hay flush
+            return "Flush";
+        }
 
-        //draw
-        return false;
-        //TODO: pendiente comprobar si se forma draws
+        // si no devuelve null
+        return null;
+        
     }
 
     //Devuelve el mejor trio
