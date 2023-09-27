@@ -139,10 +139,41 @@ public class Evaluador {
     }
 
     private boolean esFlush(List<Carta> c) {
+        
+        // contadores de 4 palos
+        int contH = 0;
+        int contD = 0;
+        int contC = 0;
+        int contS = 0;
+        
+        
+        for ( int i = 0; i < c.size(); i++){ //recorre la lista
+        
+            switch ( c.get(i).getPalo()){
+            
+                case "HEARTS" -> contH++;
+                
+                case "DIAMONDS" -> contD++;
+                
+                case "CLUBS" -> contC++;
+                    
+                case "SPADES" -> contS++;
+                 
+            }
+        }
+        
+        if ( contH == 4 || contD == 4 || contC == 4 || contS == 4) { // comprobar si hay draw de flush
+            
+            return "-Draw : Flush";
+        }
+        
+        else if (contH > 4 || contD > 4 || contC > 4 || contS > 4){ // comprobar si hay flush
+            return "Flush";
+        }
 
-        //draw
-        return false;
-        //TODO: pendiente comprobar si se forma draws
+        // si no devuelve null
+        return null;
+        
     }
 
     private boolean esTrio(List<Carta> c) {
