@@ -116,7 +116,8 @@ public class Evaluador {
 
     private boolean esFullHouse(List<Carta> c) {
         boolean fullHouse = true;
-
+        //falta el caso de más cartas ej 8
+        
         //Sublista cogiendo XXX y XX
         List<Carta> prim = c.subList(0, 3);
         List<Carta> ult = c.subList(3, 5);
@@ -176,9 +177,11 @@ public class Evaluador {
         
     }
 
+    
     private boolean esTrio(List<Carta> c) {
         boolean trio;
-
+        //falta el caso de más cartas ej 8
+        
         //Existe exactamente 3 maneras de hacer trios con 5 cartas(cartas ordenadas)
         List<Carta> prim = c.subList(0, 3); //XXX-XX
         List<Carta> seg = c.subList(1, 4);  //X-XXX-X
@@ -191,7 +194,9 @@ public class Evaluador {
 
     private boolean esDoblePareja(List<Carta> c) {
         boolean doblePareja;
-
+        
+        //falta el caso de más cartas ej 8
+        
         List<Carta> fst = c.subList(0, 2);  //XX-YYY
         List<Carta> sec = c.subList(1, 3);   //Y-XX-YY
         List<Carta> thrd = c.subList(2, 4); //YY-XX-Y
@@ -207,6 +212,8 @@ public class Evaluador {
     }
 
     private boolean esPareja(List<Carta> c) {
+        //falta el caso de más cartas ej 8
+        
         boolean pareja = false;
 
         int i = 0;
