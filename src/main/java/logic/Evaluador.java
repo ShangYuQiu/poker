@@ -1,31 +1,34 @@
 package logic;
 
-import static java.lang.Math.abs;
 import java.util.ArrayList;
 import java.util.List;
 import objects.Carta;
+import objects.Jugada;
 import objects.Mano;
 
-//Evaluador para el apartado 1 de la práctica 
 public class Evaluador {
 
-    //private List<Carta> cartas; //Cartas iniciales
-    private ArrayList<tJugada> posiblesManos; //Lista de posibles jugadas 
-    private Mano _mano;
+    //Mensajes que se imprimira para las distintas jugadas
+    private static final List<String> msg = List.of("Twos", "Threes", "Fours",
+            "Fives", "Sixes", "Sevens", "Eights", "Nines",
+            "Tens", "Jacks", "Queens", "Kings", "Ases");
 
-    public Evaluador(Mano mano) {
-        _mano = mano;
+    private ArrayList<tJugada> Jugadas; //Lista de posibles jugadas 
+    private Mano mano;
+
+    public Evaluador() {
+        this.mano = null;
     }
 
     //Metodo que busca la mejor jugada de las cartas inciales, y busca posibles jugadas(DRAW)
     public void evaluar() {
-        List<Carta> c = _mano.getCartas();
+        List<Carta> c = mano.getCartas();
     }
 
     /*-------------------------------------METODOS AUXILIARES-------------------------------------------*/
     //Metodo para comprobar que todas las cartas son del mismo palo 
-    private boolean esMismoPalo(List<Carta> c) {
-
+    private boolean esMismoPalo() {
+        List<Carta> c = this.mano.getCartas();
         boolean mismoPalo = true;
         int i = 0;
 
@@ -45,7 +48,7 @@ public class Evaluador {
 
         int i = 1;
         int primValor = c.get(0).getVal();
-        while (i < c.size()) {
+        while (i < c.size() && mismoValor) {
             if (primValor != c.get(i).getVal()) {
                 mismoValor = false;
             }
@@ -55,29 +58,14 @@ public class Evaluador {
     }
 
     /*--------------------------------------------------------------------------------------------------*/
-
-
-    /*-- METODOS PARA COMPROBAR SI CON LA MANO ACTUAL SE PUEDA FORMAR ALGUNAS DE LAS JUGADAS DEL POKER--*/
-    private boolean esEscaleraColor(List<Carta> c) {
-        return esEscalera(c) && esMismoPalo(c);
+ /*-- METODOS PARA COMPROBAR SI CON LA MANO ACTUAL SE PUEDA FORMAR ALGUNAS DE LAS JUGADAS DEL POKER--*/
+    private boolean esEscaleraColor() {
     }
 
-    private boolean esEscalera(List<Carta> c) {
-        boolean b = true;
-
-        int i = 0;
-        while (i < c.size() - 1 && b) {
-            if (abs(c.get(i).getVal() - c.get(i + 1).getVal()) != 1) {
-                b = false;
-            }
-            i++;
-        }
-
-        //openended 
-        // gutshot
-        //5 4 3 2 A
-        //Caso especial, vamos a ver si podemos formar escalera colacando A al final
-        /*if (c.get(0).getSimb().equals("A")) {
+    private Jugada esEscalera() {
+        Jugada j = null;
+        Mano //Caso especial, vamos a ver si podemos formar escalera colacando A al final
+                /*if (c.get(0).getSimb().equals("A")) {
             Carta A = c.get(0);
             c.remove(A);
             c.add(A);
@@ -91,48 +79,44 @@ public class Evaluador {
                 i++;
             }
         }*/
-        //TODO: Pendiente de comprobar si se forma draws
-        return b;
+        return j;
     }
 
-    private boolean esPoker(List<Carta> c) {
-        boolean poker = true;
+    //Devuelve el quad si existe
+    private Jugada Poker(List<Carta> c) {
+        Jugada poker = null;
 
         //Sublista con los 4 primeras cartas
         List<Carta> prim = c.subList(0, 4);
         //Sublista con las 4 ultimas cartas
         List<Carta> ult = c.subList(1, 5);
 
-        //Comprobar si ambas sublistas contiene 4 cartas iguales
-        poker = esMismoValor(prim);
-
-        //Si no forma quad se comprueba el otro caso
-        if (!poker) {
-            esMismoValor(ult);
+        if (esMismoValor(prim) || esMismoValor(ult)) {
+            int cur = c.get(2).getVal();
+            String msgJugada = String.format("Four of a kind (%s) with %s", Evaluador.msg.get(cur - 2), this.mano.getStrCartas());
+            poker = new Jugada(c, tJugada.POKER, msgJugada);
         }
 
         return poker;
     }
 
-    private boolean esFullHouse(List<Carta> c) {
-        boolean fullHouse = true;
+    //Devuelve el Full House si existe
+    private Jugada FullHouse(List<Carta> c) {
+        Jugada fullHouse = null;
 
-        //Sublista cogiendo XXX y XX
-        List<Carta> prim = c.subList(0, 3);
-        List<Carta> ult = c.subList(3, 5);
+        //Sublista cogiendo XXX-XX
+        List<Carta> prim = c.subList(0, 3); //XXX-YY
+        List<Carta> sec = c.subList(3, 5);  //YYY-XX
 
-        //Comprobar que las 3 primeras son iguales, y las 2 ultimas son iguales
-        fullHouse = esMismoValor(prim) && esMismoValor(ult);
+        //Sublista cogiendo XX-XXX
+        List<Carta> thrd = c.subList(0, 2); //XX-YYY
+        List<Carta> frth = c.subList(2, 5); //YY-XXX
 
-        //Si la primera sublista no forma un fullHouse
-        if (!fullHouse) {
-            //Sublista cogiendo XX y XXX
-            prim = c.subList(0, 2);
-            ult = c.subList(2, 5);
-
-            //Comprobar que las 2 primeras son iguales, y las 2 ultimas son iguales
-            fullHouse = esMismoValor(prim) && esMismoValor(ult);
-
+        //Comprobar que ambas partes son iguales
+        if (((Trio(prim) != null) && (Pareja(sec) != null))
+                || ((Pareja(thrd) != null) && (Trio(frth) != null))) {
+            String msgJugada = String.format("Full House with %s", this.mano.getStrCartas());
+            fullHouse = new Jugada(c, tJugada.FULL_HOUSE, msgJugada);
         }
 
         return fullHouse;
@@ -145,53 +129,82 @@ public class Evaluador {
         //TODO: pendiente comprobar si se forma draws
     }
 
-    private boolean esTrio(List<Carta> c) {
-        boolean trio;
+    //Devuelve el mejor trio
+    private Jugada Trio(List<Carta> c) {
+        Jugada trio = null;
 
         //Existe exactamente 3 maneras de hacer trios con 5 cartas(cartas ordenadas)
         List<Carta> prim = c.subList(0, 3); //XXX-XX
         List<Carta> seg = c.subList(1, 4);  //X-XXX-X
         List<Carta> ult = c.subList(2, 5);  //XX-XXX
 
-        trio = esMismoValor(prim) || esMismoValor(seg) || esMismoValor(ult);
+        //Segun el segmento que forma el trio tiene un mensaje u otro
+        if (esMismoValor(prim)) {
+            int cur = c.get(0).getVal(); //Valor de la carta que forma el trio
+            String msgJugada = String.format("Three of a kind (%s) with %s", Evaluador.msg.get(cur - 2), mano.getStrCartas());
+            trio = new Jugada(c, tJugada.TRIO, msgJugada);
+        } else if (esMismoValor(seg)) {
+            int cur = c.get(1).getVal(); //Valor de la carta que forma el trio
+            String msgJugada = String.format("Three of a kind (%s) with %s", Evaluador.msg.get(cur - 2), mano.getStrCartas());
+            trio = new Jugada(c, tJugada.TRIO, msgJugada);
+        } else if (esMismoValor(ult)) {
+            int cur = c.get(2).getVal(); //Valor de la carta que forma el trio
+            String msgJugada = String.format("Three of a kind (%s) with %s", Evaluador.msg.get(cur - 2), mano.getStrCartas());
+            trio = new Jugada(c, tJugada.TRIO, msgJugada);
+        }
 
         return trio;
     }
 
-    private boolean esDoblePareja(List<Carta> c) {
-        boolean doblePareja;
+    //Devuelve la mejor doble pareja
+    private Jugada DoblePareja(List<Carta> c) {
+        Jugada doblePareja = null;
 
+        //Sublistas segun las posibles combinaciones
         List<Carta> fst = c.subList(0, 2);  //XX-YYY
         List<Carta> sec = c.subList(1, 3);   //Y-XX-YY
         List<Carta> thrd = c.subList(2, 4); //YY-XX-Y
         List<Carta> frth = c.subList(3, 5); //YYY-XX
 
         //Primera posibilidad : XX-XX-Y
-        //Segunda posibilidad : XX-Y-XX
-        //Tercarea posibilidad : Y-XX-XX
-        doblePareja = (esPareja(fst) && esPareja(sec)) || (esPareja(fst) && esPareja(frth)) || (esPareja(sec) && esPareja(frth));
+        if (((Pareja(fst) != null) && (Pareja(thrd) != null))
+                //Segunda posibilidad : XX-Y-XX
+                || ((Pareja(fst) != null) && (Pareja(frth) != null))
+                //Tercarea posibilidad : Y-XX-XX
+                || ((Pareja(sec) != null) && (Pareja(frth) != null))) {
+            String msgJugada = String.format("%s with %s ", "Two pair", mano.getStrCartas());
+            doblePareja = new Jugada(c, tJugada.DOBLE_PAREJA, msgJugada);
+        }
 
         return doblePareja;
 
     }
 
-    private boolean esPareja(List<Carta> c) {
-        boolean pareja = false;
+    //Devuelve la mejor pareja 
+    private Jugada Pareja(List<Carta> c) {
+        Jugada pareja = null;
 
         int i = 0;
-        while (i < c.size() - 1 && !pareja) {
-            if (c.get(i).getVal() == c.get(i + 1).getVal()) {
-                pareja = true;
+        while (i < c.size() - 1) {
+            int cur = c.get(i).getVal();
+            int sig = c.get(i + 1).getVal();
+            if (cur == sig) {
+                //Forma la cadena de la jugada, por ejemplo: "A pair of Ases with AhAh7h6c2d"
+                String msgJugada = String.format("Pair of %s with %s", Evaluador.msg.get(cur - 2), mano.getStrCartas());
+                pareja = new Jugada(c, tJugada.PAREJA, msgJugada);
+                break;
             }
         }
 
         return pareja;
     }
 
-    private boolean esCartaAlta(List<Carta> c) {
-        return !esEscaleraColor(c) && !esPoker(c)
-                && !esFullHouse(c) && !esFlush(c) && !esEscalera(c) && !esTrio(c) && !esDoblePareja(c) && !esPareja(c);
-    }
 
     /*-------------------------------------------------------------------------------------------------*/
+ /*Getters y Setters*/
+    public void setMano(Mano mano) {
+        this.mano = mano;   //Cambiamos de mano
+        this.Jugadas.clear(); //Limpiamos las jugadas de la anterior mano
+    }
+
 }

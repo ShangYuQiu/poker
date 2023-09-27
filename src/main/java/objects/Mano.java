@@ -7,30 +7,41 @@ import logic.SortedArrayList;
 public class Mano {
 
     private List<Carta> cartas;   //Cartas de la mano
+    private StringBuilder strCartas;    //Representacion en cadena de la mano
+    private ArrayList<String> draws; //Mensajes explicativos de los posibles draws
     private tJugada mejorJugada;  //Mejor jugada de la mano
     private String descripcion;   //Descripcion de la mejor jugada
-    private ArrayList<String> draws; //Mensajes explicativos de los posibles draws
+    private boolean ordenado;    //Nos dice si la lista de cartas esta ordenada
 
     public Mano() {
-        cartas = new SortedArrayList<>(); //Las cartas se ordenan automaticamente en funcion de su valor
+        this.cartas = new SortedArrayList<>();
+        this.strCartas = new StringBuilder();
         this.mejorJugada = null;
         this.descripcion = null;
+        this.ordenado = false;
     }
 
     //Getters y Setters
     public void agregarCarta(Carta c) {
         cartas.add(c);
+        strCartas.append(c.getSimb()).append(c.getPalo());
+    }
+
+    //Devuelve la mano en forma de una unica String
+    public String getStrCartas() {
+        return strCartas.toString();
     }
 
     public List<Carta> getCartas() {
+        if (ordenado) {
+            return cartas;
+        }
+
         Collections.sort(cartas);
+        this.ordenado = true;
         return cartas;
     }
+    
 
-    @Override
-    //Imprime la mejor jugada que se puede formar con esta mano
-    public String toString() {
-        return mejorJugada.toString();
-    }
 
 }

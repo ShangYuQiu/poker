@@ -32,7 +32,7 @@ public class Jugada {
 
     //Getters y setters 
     public String getDescripcion() {
-        return String.format("%s with %s.", descripcion, cadCartas);
+        return descripcion;
     }
 
     public void setDescripcion(String t) {
@@ -41,6 +41,10 @@ public class Jugada {
 
     public tJugada getJugada() {
         return this.tipoJugada;
+    }
+    
+    public String getCadCartas(){
+        return cadCartas;
     }
 
 }
