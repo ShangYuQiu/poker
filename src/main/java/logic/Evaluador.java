@@ -1,7 +1,10 @@
 package logic;
 
+import static java.lang.Math.abs;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 import objects.Carta;
 import objects.Jugada;
 import objects.Mano;
@@ -13,7 +16,7 @@ public class Evaluador {
             "Fives", "Sixes", "Sevens", "Eights", "Nines",
             "Tens", "Jacks", "Queens", "Kings", "Ases");
 
-    private ArrayList<tJugada> Jugadas; //Lista de posibles jugadas 
+    private ArrayList<String> draws; //Lista de jugadas draw
     private Mano mano;
 
     public Evaluador() {
@@ -27,8 +30,7 @@ public class Evaluador {
 
     /*-------------------------------------METODOS AUXILIARES-------------------------------------------*/
     //Metodo para comprobar que todas las cartas son del mismo palo 
-    private boolean esMismoPalo() {
-        List<Carta> c = this.mano.getCartas();
+    private boolean esMismoPalo(List<Carta> c) {
         boolean mismoPalo = true;
         int i = 0;
 
@@ -59,27 +61,38 @@ public class Evaluador {
 
     /*--------------------------------------------------------------------------------------------------*/
  /*-- METODOS PARA COMPROBAR SI CON LA MANO ACTUAL SE PUEDA FORMAR ALGUNAS DE LAS JUGADAS DEL POKER--*/
-    private boolean esEscaleraColor() {
+    private Jugada EscaleraColor(List<Carta> c) {
+        Jugada escaleraColor = null;
+
+        if (Escalera(c) != null && esMismoPalo(c)) {
+            String msgJugada = String.format("Straight Flush with %s", this.mano.getStrCartas());
+            escaleraColor = new Jugada(c, tJugada.ESCALERA_COLOR, msgJugada);
+        }
+
+        return escaleraColor;
     }
 
-    private Jugada esEscalera() {
-        Jugada j = null;
-        //Mano //Caso especial, vamos a ver si podemos formar escalera colacando A al final
-                /*if (c.get(0).getSimb().equals("A")) {
-            Carta A = c.get(0);
-            c.remove(A);
-            c.add(A);
+    private Jugada Escalera(List<Carta> c) {
+        Jugada escalera = null;
+        //Elimina los duplicados y forma una nueva lista
+        Set<Carta> sinDuplicado = new LinkedHashSet<>(c);
+        ArrayList<Carta> nList = new ArrayList<>(sinDuplicado);
 
-            b = true;
-            i = 0;
-            while (i < c.size() - 1 && b) {
-                if (abs(c.get(i).getNum() - c.get(i + 1).getNum()) != 1) {
-                    b = false;
-                }
-                i++;
-            }
-        }*/
-        return j;
+        //Si hay 5 elem, y la diferencia del primero respecto al ultimo es de 4 => Escalera
+        if (nList.size() == 5 && abs(nList.get(0).getVal() - nList.get(4).getVal()) == 4) {
+            String msgJugada = String.format("Straight with %s", this.mano.getStrCartas());
+            escalera = new Jugada(c, tJugada.ESCALERA, msgJugada);
+        } //Si hay al menos 4 elem, y la diferencia del primero respecto al penultimo es de 4 => gutshot
+        else if (nList.size() >= 4 && abs(nList.get(0).getVal() - nList.get(3).getVal()) == 4) {
+            draws.add("Draw: Straight gutshot");
+        } else if (nList.size() == 4 && abs(nList.get(0).getVal() - nList.get(3).getVal()) == 3) {
+            draws.add("Draw: Straight open ended");
+        } else if (nList.size() == 5
+                && ((abs(nList.get(0).getVal() - nList.get(3).getVal())) == 3) || (abs(nList.get(1).getVal() - nList.get(4).getVal()) == 3)) {
+            draws.add("Draw: Straight open ended");
+        }
+
+        return escalera;
     }
 
     //Devuelve el quad si existe
@@ -122,42 +135,42 @@ public class Evaluador {
         return fullHouse;
     }
 
-    private boolean esFlush(List<Carta> c) {
-        
+    private Jugada Flush(List<Carta> c) {
+        Jugada flush = null;
+
         // contadores de 4 palos
         int contH = 0;
         int contD = 0;
         int contC = 0;
         int contS = 0;
-        
-        
-        for ( int i = 0; i < c.size(); i++){ //recorre la lista
-        
-            switch ( c.get(i).getPalo()){
-            
-                case "HEARTS" -> contH++;
-                
-                case "DIAMONDS" -> contD++;
-                
-                case "CLUBS" -> contC++;
-                    
-                case "SPADES" -> contS++;
-                 
+
+        //Cuenta el numero de carta de cada tipo de palo
+        for (int i = 0; i < c.size(); i++) {
+
+            switch (c.get(i).getPalo()) {
+
+                case "HEARTS" ->
+                    contH++;
+
+                case "DIAMONDS" ->
+                    contD++;
+
+                case "CLUBS" ->
+                    contC++;
+
+                case "SPADES" ->
+                    contS++;
+
             }
         }
-        
-        if ( contH == 4 || contD == 4 || contC == 4 || contS == 4) { // comprobar si hay draw de flush
-            
-            return "-Draw : Flush";
-        }
-        
-        else if (contH > 4 || contD > 4 || contC > 4 || contS > 4){ // comprobar si hay flush
-            return "Flush";
+
+        if (contH == 4 || contD == 4 || contC == 4 || contS == 4) { //Comprobar si hay draw de flush
+            draws.add("Draw: Flush");
+        } else if (contH > 4 || contD > 4 || contC > 4 || contS > 4) { //Comprobar si hay flush
+            flush = new Jugada(c, tJugada.COLOR, "Flush");
         }
 
-        // si no devuelve null
-        return null;
-        
+        return flush;
     }
 
     //Devuelve el mejor trio
@@ -235,7 +248,7 @@ public class Evaluador {
  /*Getters y Setters*/
     public void setMano(Mano mano) {
         this.mano = mano;   //Cambiamos de mano
-        this.Jugadas.clear(); //Limpiamos las jugadas de la anterior mano
+        this.draws.clear(); //Limpia los draws de la anterior mano
     }
 
 }
