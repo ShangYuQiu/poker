@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.InputStreamReader;
+import java.io.BufferedWriter;
 import objects.Mano;
 import objects.Carta;
 
@@ -35,21 +36,28 @@ public class Apartado1 {
                 for (int i = 0; i < carta.length(); i += 2) {
                     // no se si esta bien
                     Carta c = new Carta(carta.substring(i, i + 1), carta.substring(i + 1, i + 2));
-                    m.anniadirCart(c);
+                    m.agregarCarta(c);
                 }
-                m.ordenar();
                 //salida
-                System.out.println(m.toString());
+                //salida
             	
-                /*BufferedWriter writer = new BufferedWriter(f_salida);
+                BufferedWriter writer = new BufferedWriter(f_salida);
                    writer.newLine();
-                writer.append("Best Hand:");
-                for(int i=0;i<5;i++) {
-                   writer.append(m.getCartas().toString().charAt(i));
+                writer.append("Best Hand: ");
+                    //solucion
+                   writer.append(m.getStrCartas());
+                   writer.newLine();
+                    //if es Straight Gutshot
+                   writer.append("Draw: ");
+                   writer.append("Straight Gutshot");
+                   //else if es gutshot
+                   writer.append("Draw: ");
+                   writer.append("Gutshot");
+                   //if es Flush
+                   writer.append("Draw:");
+                   writer.append("Flush");
                    
                    writer.close();
-                }*/
-
             }
                 } catch (Exception e) {
             e.printStackTrace();
