@@ -2,7 +2,9 @@ package logic;
 
 import static java.lang.Math.abs;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 import objects.Carta;
 import objects.Jugada;
 import objects.Mano;
@@ -28,8 +30,7 @@ public class Evaluador {
 
     /*-------------------------------------METODOS AUXILIARES-------------------------------------------*/
     //Metodo para comprobar que todas las cartas son del mismo palo 
-    private boolean esMismoPalo() {
-        List<Carta> c = this.mano.getCartas();
+    private boolean esMismoPalo(List<Carta> c) {
         boolean mismoPalo = true;
         int i = 0;
 
@@ -57,41 +58,40 @@ public class Evaluador {
 
         return mismoValor;
     }
-    
-    //Metodo para comprobar si la lista es consecutivo
-    private boolean esConsecutivo(List<Carta> c){
-        boolean consecutivo = true;
-        
-        int i = 0;
-        while(i < c.size()){
-            if(abs(c.get(i).getVal() - c.get(i+1).getVal()) > 1){
-                consecutivo = false;
-                break;
-            }
-        }
-        return consecutivo;
-    }
 
     /*--------------------------------------------------------------------------------------------------*/
  /*-- METODOS PARA COMPROBAR SI CON LA MANO ACTUAL SE PUEDA FORMAR ALGUNAS DE LAS JUGADAS DEL POKER--*/
-    private boolean esEscaleraColor() {
+    private Jugada EscaleraColor(List<Carta> c) {
+        Jugada escaleraColor = null;
+
+        if (Escalera(c) != null && esMismoPalo(c)) {
+            String msgJugada = String.format("Straight Flush with %s", this.mano.getStrCartas());
+            escaleraColor = new Jugada(c, tJugada.ESCALERA_COLOR, msgJugada);
+        }
+
+        return escaleraColor;
     }
 
-    private Jugada esEscalera(List<Carta> c) {
+    private Jugada Escalera(List<Carta> c) {
         Jugada escalera = null;
-        
-        //La mano forma una escalera
-        if(esConsecutivo(c)){
+        //Elimina los duplicados y forma una nueva lista
+        Set<Carta> sinDuplicado = new LinkedHashSet<>(c);
+        ArrayList<Carta> nList = new ArrayList<>(sinDuplicado);
+
+        //Si hay 5 elem, y la diferencia del primero respecto al ultimo es de 4 => Escalera
+        if (nList.size() == 5 && abs(nList.get(0).getVal() - nList.get(4).getVal()) == 4) {
             String msgJugada = String.format("Straight with %s", this.mano.getStrCartas());
             escalera = new Jugada(c, tJugada.ESCALERA, msgJugada);
+        } //Si hay al menos 4 elem, y la diferencia del primero respecto al penultimo es de 4 => gutshot
+        else if (nList.size() >= 4 && abs(nList.get(0).getVal() - nList.get(3).getVal()) == 4) {
+            draws.add("Draw: Straight gutshot");
+        } else if (nList.size() == 4 && abs(nList.get(0).getVal() - nList.get(3).getVal()) == 3) {
+            draws.add("Draw: Straight open ended");
+        } else if (nList.size() == 5
+                && ((abs(nList.get(0).getVal() - nList.get(3).getVal())) == 3) || (abs(nList.get(1).getVal() - nList.get(4).getVal()) == 3)) {
+            draws.add("Draw: Straight open ended");
         }
-        //Caso de Draw y es open ended
-        else if(esConsecutivo(c.subList(1, 5)) || esConsecutivo(c.subList(0,4))){
-            draws.add("Draw: Straight Open Ended");
-        }
-        //Caso de draw y es gutshot
-        else if 
-        
+
         return escalera;
     }
 
@@ -143,9 +143,9 @@ public class Evaluador {
         int contD = 0;
         int contC = 0;
         int contS = 0;
-        
+
         //Cuenta el numero de carta de cada tipo de palo
-        for (int i = 0; i < c.size(); i++) { 
+        for (int i = 0; i < c.size(); i++) {
 
             switch (c.get(i).getPalo()) {
 
