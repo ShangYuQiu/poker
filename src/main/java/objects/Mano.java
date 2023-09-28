@@ -41,7 +41,23 @@ public class Mano {
         this.ordenado = true;
         return cartas;
     }
+
+    public Jugada getJugada(){
+        return this.jugada;
+    }
     
+    public ArrayList <String> getDraws(){
+        return draw;
+    }
+    // setters
+    
+    public void setJugada(Jugada j){
+           this.jugada = j;
+    }
+    
+    public void setDraw ( ArrayList <String> dr){
+        this.draw = dr;
+    }
 
 
 }
