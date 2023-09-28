@@ -11,6 +11,11 @@ public class Carta implements Comparable<Carta> {
         this.palo = palo;
         init(); //Parsea la carta a su valor real referencial
     }
+    
+    //Setter
+    public void setValor(int val){
+        this.valor = val;
+    }
 
     //Metodos auxiliares
     //Parsea la carta en un valor numerico de referencia

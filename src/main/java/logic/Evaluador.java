@@ -1,5 +1,6 @@
 package logic;
 
+import static java.lang.Math.abs;
 import java.util.ArrayList;
 import java.util.List;
 import objects.Carta;
@@ -13,7 +14,7 @@ public class Evaluador {
             "Fives", "Sixes", "Sevens", "Eights", "Nines",
             "Tens", "Jacks", "Queens", "Kings", "Ases");
 
-    private ArrayList<tJugada> Jugadas; //Lista de posibles jugadas 
+    private ArrayList<String> draws; //Lista de jugadas draw
     private Mano mano;
 
     public Evaluador() {
@@ -56,30 +57,42 @@ public class Evaluador {
 
         return mismoValor;
     }
+    
+    //Metodo para comprobar si la lista es consecutivo
+    private boolean esConsecutivo(List<Carta> c){
+        boolean consecutivo = true;
+        
+        int i = 0;
+        while(i < c.size()){
+            if(abs(c.get(i).getVal() - c.get(i+1).getVal()) > 1){
+                consecutivo = false;
+                break;
+            }
+        }
+        return consecutivo;
+    }
 
     /*--------------------------------------------------------------------------------------------------*/
  /*-- METODOS PARA COMPROBAR SI CON LA MANO ACTUAL SE PUEDA FORMAR ALGUNAS DE LAS JUGADAS DEL POKER--*/
     private boolean esEscaleraColor() {
     }
 
-    private Jugada esEscalera() {
-        Jugada j = null;
-        //Mano //Caso especial, vamos a ver si podemos formar escalera colacando A al final
-                /*if (c.get(0).getSimb().equals("A")) {
-            Carta A = c.get(0);
-            c.remove(A);
-            c.add(A);
-
-            b = true;
-            i = 0;
-            while (i < c.size() - 1 && b) {
-                if (abs(c.get(i).getNum() - c.get(i + 1).getNum()) != 1) {
-                    b = false;
-                }
-                i++;
-            }
-        }*/
-        return j;
+    private Jugada esEscalera(List<Carta> c) {
+        Jugada escalera = null;
+        
+        //La mano forma una escalera
+        if(esConsecutivo(c)){
+            String msgJugada = String.format("Straight with %s", this.mano.getStrCartas());
+            escalera = new Jugada(c, tJugada.ESCALERA, msgJugada);
+        }
+        //Caso de Draw y es open ended
+        else if(esConsecutivo(c.subList(1, 5)) || esConsecutivo(c.subList(0,4))){
+            draws.add("Draw: Straight Open Ended");
+        }
+        //Caso de draw y es gutshot
+        else if 
+        
+        return escalera;
     }
 
     //Devuelve el quad si existe
@@ -122,42 +135,42 @@ public class Evaluador {
         return fullHouse;
     }
 
-    private boolean esFlush(List<Carta> c) {
-        
+    private Jugada Flush(List<Carta> c) {
+        Jugada flush = null;
+
         // contadores de 4 palos
         int contH = 0;
         int contD = 0;
         int contC = 0;
         int contS = 0;
         
-        
-        for ( int i = 0; i < c.size(); i++){ //recorre la lista
-        
-            switch ( c.get(i).getPalo()){
-            
-                case "HEARTS" -> contH++;
-                
-                case "DIAMONDS" -> contD++;
-                
-                case "CLUBS" -> contC++;
-                    
-                case "SPADES" -> contS++;
-                 
+        //Cuenta el numero de carta de cada tipo de palo
+        for (int i = 0; i < c.size(); i++) { 
+
+            switch (c.get(i).getPalo()) {
+
+                case "HEARTS" ->
+                    contH++;
+
+                case "DIAMONDS" ->
+                    contD++;
+
+                case "CLUBS" ->
+                    contC++;
+
+                case "SPADES" ->
+                    contS++;
+
             }
         }
-        
-        if ( contH == 4 || contD == 4 || contC == 4 || contS == 4) { // comprobar si hay draw de flush
-            
-            return "-Draw : Flush";
-        }
-        
-        else if (contH > 4 || contD > 4 || contC > 4 || contS > 4){ // comprobar si hay flush
-            return "Flush";
+
+        if (contH == 4 || contD == 4 || contC == 4 || contS == 4) { //Comprobar si hay draw de flush
+            draws.add("Draw: Flush");
+        } else if (contH > 4 || contD > 4 || contC > 4 || contS > 4) { //Comprobar si hay flush
+            flush = new Jugada(c, tJugada.COLOR, "Flush");
         }
 
-        // si no devuelve null
-        return null;
-        
+        return flush;
     }
 
     //Devuelve el mejor trio
@@ -235,7 +248,7 @@ public class Evaluador {
  /*Getters y Setters*/
     public void setMano(Mano mano) {
         this.mano = mano;   //Cambiamos de mano
-        this.Jugadas.clear(); //Limpiamos las jugadas de la anterior mano
+        this.draws.clear(); //Limpia los draws de la anterior mano
     }
 
 }
