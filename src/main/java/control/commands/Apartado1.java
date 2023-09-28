@@ -41,26 +41,28 @@ public class Apartado1 {
                 //salida
                 //salida
             	
-                BufferedWriter writer = new BufferedWriter(f_salida);
-                   writer.newLine();
-                writer.append("Best Hand: ");
+               ev.setMano(m);
+                ev.evaluar();
+
+                try ( //salida
+                        //salida
+                        BufferedWriter writer = new BufferedWriter(f_salida)) {
+                    writer.newLine();
+                    writer.append("- Best Hand: ");
                     //solucion
-                   writer.append(m.getStrCartas());
-                   writer.newLine();
+                    writer.append(m.getJugada().getDescripcion());
+                    writer.newLine();
                     //if es Straight Gutshot
-                   writer.append("Draw: ");
-                   writer.append("Straight Gutshot");
-                   //else if es gutshot
-                   writer.append("Draw: ");
-                   writer.append("Gutshot");
-                   //if es Flush
-                   writer.append("Draw:");
-                   writer.append("Flush");
-                   
-                   writer.close();
+                    for (String s : m.getDraws()) {
+                        writer.append("- " + s);
+                        writer.newLine();
+                    }
+                    
+                    writer.close();
+                }
             }
-                } catch (Exception e) {
-            e.printStackTrace();
+                } catch (IOException e) {
+            System.out.print(e);
         }
     }
 }
