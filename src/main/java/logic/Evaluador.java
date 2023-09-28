@@ -21,11 +21,41 @@ public class Evaluador {
 
     public Evaluador() {
         this.mano = null;
+         this.draws = new ArrayList <String>();
     }
 
     //Metodo que busca la mejor jugada de las cartas inciales, y busca posibles jugadas(DRAW)
     public void evaluar() {
+       
         List<Carta> c = mano.getCartas();
+        Jugada j;
+
+        // pasar la jugada que ha evaluado a mano correspondiente
+        if ((j = EscaleraColor(c)) != null) {
+            mano.setJugada(j);
+
+        } else if ((j = Poker(c)) != null) {
+            mano.setJugada(j);
+        } else if ((j = FullHouse(c)) != null) {
+            mano.setJugada(j);
+        } else if ((j = Flush(c)) != null) {
+            mano.setJugada(j);
+        } else if ((j = Escalera(c)) != null) {
+            mano.setJugada(j);
+        } else if ((j = Trio(c)) != null) {
+            mano.setJugada(j);
+        } else if ((j = DoblePareja(c)) != null) {
+            mano.setJugada(j);
+        } else if ((j = Pareja(c)) != null) {
+            mano.setJugada(j);
+        } else {
+            String msgJugada = String.format("High Card", this.mano.getStrCartas());
+            j = new Jugada(c, tJugada.CARTA_ALTA, msgJugada);
+            mano.setJugada(j);
+        }
+
+        mano.setDraws(draws);
+        
     }
 
     /*-------------------------------------METODOS AUXILIARES-------------------------------------------*/
