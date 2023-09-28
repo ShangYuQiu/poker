@@ -2,6 +2,7 @@ package logic;
 
 import static java.lang.Math.abs;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -71,8 +72,8 @@ public class Evaluador {
 
         return escaleraColor;
     }
-
-    private Jugada Escalera(List<Carta> c) {
+    
+    private Jugada auxEscalera(List<Carta> c){
         Jugada escalera = null;
         //Elimina los duplicados y forma una nueva lista
         Set<Carta> sinDuplicado = new LinkedHashSet<>(c);
@@ -92,6 +93,29 @@ public class Evaluador {
             draws.add("Draw: Straight open ended");
         }
 
+        return escalera;
+    }
+
+    private Jugada Escalera(List<Carta> c) {
+        Jugada escalera = null;
+        
+        //Distinguimos casos dependiendo de si la mano contiene Aces o no 
+        if(c.get(0).getSimb().equals("A")){
+            escalera = auxEscalera(c);
+            
+            //Si no se encuentra escalera con Ace como el mayor
+            if(escalera == null){
+                for(Carta o : c){
+                    if(o.getSimb().equals("A")){
+                        o.setValor(1);
+                    }
+                }
+                //Se vuelve a ordenar 
+                Collections.sort(c);
+                escalera = auxEscalera(c);
+            }
+        }
+        
         return escalera;
     }
 
