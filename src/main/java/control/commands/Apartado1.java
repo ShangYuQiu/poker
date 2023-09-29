@@ -8,12 +8,15 @@ import java.io.InputStreamReader;
 import java.io.BufferedWriter;
 import objects.Mano;
 import objects.Carta;
+import logic.Evaluador;
+import java.io.IOException;
 
 public class Apartado1 {
 
     private final String entrada;
     private final String salida;
     private Mano mano;
+    private Evaluador ev;
 
     public Apartado1(String entra, String sal) {
         this.entrada = entra;
@@ -40,14 +43,13 @@ public class Apartado1 {
                 }
                 //salida
                 //salida
-            	
+            	this.ev = new Evaluador();
                ev.setMano(m);
                 ev.evaluar();
 
                 try ( //salida
                         //salida
                         BufferedWriter writer = new BufferedWriter(f_salida)) {
-                    writer.newLine();
                     writer.append("- Best Hand: ");
                     //solucion
                     writer.append(m.getJugada().getDescripcion());
