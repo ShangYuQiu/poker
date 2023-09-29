@@ -9,15 +9,14 @@ public class Mano {
     private List<Carta> cartas;   //Cartas de la mano
     private StringBuilder strCartas;    //Representacion en cadena de la mano
     private ArrayList<String> draws; //Mensajes explicativos de los posibles draws
-    private tJugada mejorJugada;  //Mejor jugada de la mano
-    private String descripcion;   //Descripcion de la mejor jugada
+    private Jugada jugada;
     private boolean ordenado;    //Nos dice si la lista de cartas esta ordenada
 
     public Mano() {
         this.cartas = new SortedArrayList<>();
         this.strCartas = new StringBuilder();
-        this.mejorJugada = null;
-        this.descripcion = null;
+        this.jugada = null;
+        this.draws = new ArrayList<String>();
         this.ordenado = false;
     }
 
@@ -47,7 +46,7 @@ public class Mano {
     }
     
     public ArrayList <String> getDraws(){
-        return draw;
+        return draws;
     }
     // setters
     
@@ -55,8 +54,8 @@ public class Mano {
            this.jugada = j;
     }
     
-    public void setDraw ( ArrayList <String> dr){
-        this.draw = dr;
+    public void setDraws ( ArrayList <String> dr){
+        this.draws = dr;
     }
 
 
