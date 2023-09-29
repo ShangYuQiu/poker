@@ -85,6 +85,7 @@ public class Evaluador {
             if (primValor != c.get(i).getVal()) {
                 mismoValor = false;
             }
+            i++;
         }
 
         return mismoValor;
@@ -180,8 +181,8 @@ public class Evaluador {
         List<Carta> frth = c.subList(2, 5); //YY-XXX
 
         //Comprobar que ambas partes son iguales
-        if (((Trio(prim) != null) && (Pareja(sec) != null))
-                || ((Pareja(thrd) != null) && (Trio(frth) != null))) {
+        if (((esMismoValor(prim)) && (esMismoValor(sec)))
+                || ((esMismoValor(thrd)) && (esMismoValor(frth)))) {
             String msgJugada = String.format("Full House with %s", this.mano.getStrCartas());
             fullHouse = new Jugada(c, tJugada.FULL_HOUSE, msgJugada);
         }
@@ -292,6 +293,7 @@ public class Evaluador {
                 pareja = new Jugada(c, tJugada.PAREJA, msgJugada);
                 break;
             }
+            i++;
         }
 
         return pareja;
