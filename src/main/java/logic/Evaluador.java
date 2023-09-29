@@ -204,16 +204,16 @@ public class Evaluador {
 
             switch (c.get(i).getPalo()) {
 
-                case "HEARTS" ->
+                case "h" ->
                     contH++;
 
-                case "DIAMONDS" ->
+                case "d" ->
                     contD++;
 
-                case "CLUBS" ->
+                case "c" ->
                     contC++;
 
-                case "SPADES" ->
+                case "s" ->
                     contS++;
 
             }
