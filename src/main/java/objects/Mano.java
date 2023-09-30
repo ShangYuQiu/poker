@@ -1,15 +1,16 @@
 package objects;
 
 import java.util.*;
-import logic.tJugada;
 import logic.SortedArrayList;
+import logic.tJugada;
 
 public class Mano {
 
-    private List<Carta> cartas;   //Cartas de la mano
+    private ArrayList<Carta> cartas;   //Cartas de la mano
     private StringBuilder strCartas;    //Representacion en cadena de la mano
     private ArrayList<String> draws; //Mensajes explicativos de los posibles draws
-    private tJugada mejorJugada;  //Mejor jugada de la mano
+    private Jugada mejorJugada;  //Mejor jugada de la mano
+    private tJugada tipoJugada;  //Tipo de la mejor jugada, por ejemplo, Color, Escalera...
     private String descripcion;   //Descripcion de la mejor jugada
     private boolean ordenado;    //Nos dice si la lista de cartas esta ordenada
 
@@ -21,14 +22,15 @@ public class Mano {
         this.ordenado = false;
     }
 
-    //Getters y Setters
     public void agregarCarta(Carta c) {
         cartas.add(c);
-        strCartas.append(c.getSimb()).append(c.getPalo());
     }
 
     //Devuelve la mano en forma de una unica String
     public String getStrCartas() {
+        for (Carta c : cartas) {
+            strCartas.append(c.getSimb()).append(c.getPalo());
+        }
         return strCartas.toString();
     }
 
@@ -37,27 +39,31 @@ public class Mano {
             return cartas;
         }
 
+        //Ordena las cartas de manera descendente
         Collections.sort(cartas);
         this.ordenado = true;
         return cartas;
     }
 
-    public Jugada getJugada(){
-        return this.jugada;
-    }
-    
-    public ArrayList <String> getDraws(){
-        return draw;
-    }
-    // setters
-    
-    public void setJugada(Jugada j){
-           this.jugada = j;
-    }
-    
-    public void setDraw ( ArrayList <String> dr){
-        this.draw = dr;
+    public Jugada getJugada() {
+        return this.mejorJugada;
     }
 
+    public ArrayList<String> getDraws() {
+        return draws;
+    }
+
+    public tJugada getTipoJugada() {
+        return mejorJugada.getJugada();
+    }
+
+    // setters 
+    public void setJugada(Jugada j) {
+        this.mejorJugada = j;
+    }
+
+    public void setDraw(ArrayList<String> dr) {
+        this.draws = dr;
+    }
 
 }

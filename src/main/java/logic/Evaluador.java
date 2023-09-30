@@ -22,12 +22,12 @@ public class Evaluador {
 
     public Evaluador() {
         this.mano = null;
-         this.draws = new ArrayList <String>();
+        this.draws = new ArrayList<>();
     }
 
     //Metodo que busca la mejor jugada de las cartas inciales, y busca posibles jugadas(DRAW)
     public void evaluar() {
-       
+
         List<Carta> c = mano.getCartas();
         Jugada j;
 
@@ -55,8 +55,8 @@ public class Evaluador {
             mano.setJugada(j);
         }
 
-        mano.setDraws(draws);
-        
+        mano.setDraw(draws);
+
     }
 
     /*-------------------------------------METODOS AUXILIARES-------------------------------------------*/
@@ -102,8 +102,8 @@ public class Evaluador {
 
         return escaleraColor;
     }
-    
-    private Jugada auxEscalera(List<Carta> c){
+
+    private Jugada auxEscalera(List<Carta> c) {
         Jugada escalera = null;
         //Elimina los duplicados y forma una nueva lista
         Set<Carta> sinDuplicado = new LinkedHashSet<>(c);
@@ -115,12 +115,12 @@ public class Evaluador {
             escalera = new Jugada(c, tJugada.ESCALERA, msgJugada);
         } //Si hay al menos 4 elem, y la diferencia del primero respecto al penultimo es de 4 => gutshot
         else if (nList.size() >= 4 && abs(nList.get(0).getVal() - nList.get(3).getVal()) == 4) {
-            draws.add("Draw: Straight gutshot");
+            draws.add("Draw: Straight Gutshot");
         } else if (nList.size() == 4 && abs(nList.get(0).getVal() - nList.get(3).getVal()) == 3) {
-            draws.add("Draw: Straight open ended");
+            draws.add("Draw: Straight Open ended");
         } else if (nList.size() == 5
                 && ((abs(nList.get(0).getVal() - nList.get(3).getVal())) == 3) || (abs(nList.get(1).getVal() - nList.get(4).getVal()) == 3)) {
-            draws.add("Draw: Straight open ended");
+            draws.add("Draw: Straight Open ended");
         }
 
         return escalera;
@@ -128,24 +128,29 @@ public class Evaluador {
 
     private Jugada Escalera(List<Carta> c) {
         Jugada escalera = null;
-        
+
         //Distinguimos casos dependiendo de si la mano contiene Aces o no 
-        if(c.get(0).getSimb().equals("A")){
+        if (c.get(0).getSimb().equals("A")) {
             escalera = auxEscalera(c);
-            
+
             //Si no se encuentra escalera con Ace como el mayor
-            if(escalera == null){
-                for(Carta o : c){
-                    if(o.getSimb().equals("A")){
+            if (escalera == null) {
+                //Se crea una copia de la lista 
+                List<Carta> tmp = new ArrayList<>(c);
+                for (Carta o : c) {
+                    if (o.getSimb().equals("A")) {
                         o.setValor(1);
                     }
                 }
                 //Se vuelve a ordenar 
                 Collections.sort(c);
                 escalera = auxEscalera(c);
+                
+                //Devolver el estado anterior de la mano
+                c = tmp;
             }
         }
-        
+
         return escalera;
     }
 
@@ -158,10 +163,21 @@ public class Evaluador {
         //Sublista con las 4 ultimas cartas
         List<Carta> ult = c.subList(1, 5);
 
-        if (esMismoValor(prim) || esMismoValor(ult)) {
-            int cur = c.get(2).getVal();
+        //Si las primeras 4 cartas son iguales
+        if(esMismoValor(prim)){
+            int cur = c.get(0).getVal();
             String msgJugada = String.format("Four of a kind (%s) with %s", Evaluador.msg.get(cur - 2), this.mano.getStrCartas());
             poker = new Jugada(c, tJugada.POKER, msgJugada);
+        }
+        //Si las 4 ultimas son iguales
+        else if(esMismoValor(ult)){
+            //Ordenar para colocar la primera carta al final
+            Carta tmp = c.get(0);
+            c.remove(0);
+            c.add(tmp);
+            int cur = c.get(0).getVal();
+            String msgJugada = String.format("Four of a kind (%s) with %s", Evaluador.msg.get(cur - 2), this.mano.getStrCartas());
+            poker = new Jugada(c, tJugada.POKER, msgJugada);     
         }
 
         return poker;
@@ -179,9 +195,17 @@ public class Evaluador {
         List<Carta> thrd = c.subList(0, 2); //XX-YYY
         List<Carta> frth = c.subList(2, 5); //YY-XXX
 
-        //Comprobar que ambas partes son iguales
-        if (((Trio(prim) != null) && (Pareja(sec) != null))
-                || ((Pareja(thrd) != null) && (Trio(frth) != null))) {
+        //Si el trio aparece antes de la pareja 
+        if(((Trio(prim) != null) && (Pareja(sec) != null))){
+            String msgJugada = String.format("Full House with %s", this.mano.getStrCartas());
+            fullHouse = new Jugada(c, tJugada.FULL_HOUSE, msgJugada);
+        }
+        //Si aparece la pareja antes del trio 
+        else if(((Pareja(thrd) != null) && (Trio(frth) != null))){
+            //Ordenar para poner el trio antes de la pareja 
+            c.clear();
+            c.addAll(frth);
+            c.addAll(thrd);
             String msgJugada = String.format("Full House with %s", this.mano.getStrCartas());
             fullHouse = new Jugada(c, tJugada.FULL_HOUSE, msgJugada);
         }
@@ -236,17 +260,30 @@ public class Evaluador {
         List<Carta> seg = c.subList(1, 4);  //X-XXX-X
         List<Carta> ult = c.subList(2, 5);  //XX-XXX
 
-        //Segun el segmento que forma el trio tiene un mensaje u otro
         if (esMismoValor(prim)) {
             int cur = c.get(0).getVal(); //Valor de la carta que forma el trio
             String msgJugada = String.format("Three of a kind (%s) with %s", Evaluador.msg.get(cur - 2), mano.getStrCartas());
             trio = new Jugada(c, tJugada.TRIO, msgJugada);
         } else if (esMismoValor(seg)) {
-            int cur = c.get(1).getVal(); //Valor de la carta que forma el trio
+            //Ordena la carta correctamente
+            Carta tmp = c.get(0);
+            c.remove(0);
+            c.add(3, tmp);
+            
+            //Recoge uno de los valores del trio (Se encuentra al inicio una vez ordenado)
+            int cur = c.get(0).getVal(); 
             String msgJugada = String.format("Three of a kind (%s) with %s", Evaluador.msg.get(cur - 2), mano.getStrCartas());
             trio = new Jugada(c, tJugada.TRIO, msgJugada);
         } else if (esMismoValor(ult)) {
-            int cur = c.get(2).getVal(); //Valor de la carta que forma el trio
+            //Ordena la carta correctamente
+            Carta tmp = c.get(0);
+            Carta tmp2 = c.get(1);
+            c.remove(0);
+            c.remove(1);
+            c.add(tmp);
+            c.add(tmp2);
+            
+            int cur = c.get(0).getVal(); 
             String msgJugada = String.format("Three of a kind (%s) with %s", Evaluador.msg.get(cur - 2), mano.getStrCartas());
             trio = new Jugada(c, tJugada.TRIO, msgJugada);
         }
@@ -255,7 +292,7 @@ public class Evaluador {
     }
 
     //Devuelve la mejor doble pareja
-    private Jugada DoblePareja(List<Carta> c) {
+    private Jugada DoblePareja(ArrayList<Carta> c) {
         Jugada doblePareja = null;
 
         //Sublistas segun las posibles combinaciones
@@ -265,17 +302,27 @@ public class Evaluador {
         List<Carta> frth = c.subList(3, 5); //YYY-XX
 
         //Primera posibilidad : XX-XX-Y
-        if (((Pareja(fst) != null) && (Pareja(thrd) != null))
-                //Segunda posibilidad : XX-Y-XX
-                || ((Pareja(fst) != null) && (Pareja(frth) != null))
-                //Tercarea posibilidad : Y-XX-XX
-                || ((Pareja(sec) != null) && (Pareja(frth) != null))) {
+        if (((Pareja(fst) != null) && (Pareja(thrd) != null))) {
+            //La jugada ya esta ordenada
+            String msgJugada = String.format("%s with %s ", "Two pair", mano.getStrCartas());
+            doblePareja = new Jugada(c, tJugada.DOBLE_PAREJA, msgJugada);
+            //Segunda posibilidad : XX-Y-XX
+        } else if (((Pareja(fst) != null) && (Pareja(frth) != null))) {
+            Carta tmp = c.get(2); //La carta restante de coger las 2 parejas 
+            c.remove(2);    //Se descarta el elemento central
+            c.add(tmp);     //Se vuelve a añadir al final para ordenar la jugada
+            String msgJugada = String.format("%s with %s ", "Two pair", mano.getStrCartas());
+            doblePareja = new Jugada(c, tJugada.DOBLE_PAREJA, msgJugada);
+            //Tercarea posibilidad : Y-XX-XX
+        } else if (((Pareja(sec) != null) && (Pareja(frth) != null))) {
+            Carta tmp = c.get(0);   //El elemento restante es el primero
+            c.remove(0);        //Desplazar el primero elem al final
+            c.add(tmp);
             String msgJugada = String.format("%s with %s ", "Two pair", mano.getStrCartas());
             doblePareja = new Jugada(c, tJugada.DOBLE_PAREJA, msgJugada);
         }
 
         return doblePareja;
-
     }
 
     //Devuelve la mejor pareja 
@@ -287,6 +334,12 @@ public class Evaluador {
             int cur = c.get(i).getVal();
             int sig = c.get(i + 1).getVal();
             if (cur == sig) {
+                //Mete la pareja de carta al principio de la jugada
+                Carta tmp = c.remove(i);
+                c.remove(i + 1);
+                c.add(0, tmp);
+                c.add(1, tmp);
+
                 //Forma la cadena de la jugada, por ejemplo: "A pair of Ases with AhAh7h6c2d"
                 String msgJugada = String.format("Pair of %s with %s", Evaluador.msg.get(cur - 2), mano.getStrCartas());
                 pareja = new Jugada(c, tJugada.PAREJA, msgJugada);
