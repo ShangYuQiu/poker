@@ -28,9 +28,13 @@ public class Mano {
 
     //Devuelve la mano en forma de una unica String
     public String getStrCartas() {
-        for (Carta c : cartas) {
-            strCartas.append(c.getSimb()).append(c.getPalo());
+
+        if (strCartas.isEmpty()) {
+            for (Carta c : cartas) {
+                strCartas.append(c.getSimb()).append(c.getPalo());
+            }
         }
+
         return strCartas.toString();
     }
 

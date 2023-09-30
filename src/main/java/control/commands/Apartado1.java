@@ -31,24 +31,21 @@ public class Apartado1 {
             FileInputStream fis = new FileInputStream(f);
             InputStreamReader fr = new InputStreamReader(fis);
             BufferedReader in = new BufferedReader(fr);
-            FileWriter f_salida=new FileWriter(salida,true);
+            FileWriter f_salida = new FileWriter(salida, true);
             String carta;
             while ((carta = in.readLine()) != null) {
 
                 Mano m = new Mano();
                 for (int i = 0; i < carta.length(); i += 2) {
-                    // no se si esta bien
                     Carta c = new Carta(carta.substring(i, i + 1), carta.substring(i + 1, i + 2));
                     m.agregarCarta(c);
                 }
                 //salida
-                //salida
-            	this.ev = new Evaluador();
-               ev.setMano(m);
+                this.ev = new Evaluador();
+                ev.setMano(m);
                 ev.evaluar();
 
-                try ( //salida
-                        //salida
+                try (//salida
                         BufferedWriter writer = new BufferedWriter(f_salida)) {
                     writer.append("- Best Hand: ");
                     //solucion
@@ -59,11 +56,11 @@ public class Apartado1 {
                         writer.append("- " + s);
                         writer.newLine();
                     }
-                    
+
                     writer.close();
                 }
             }
-                } catch (IOException e) {
+        } catch (IOException e) {
             System.out.print(e);
         }
     }

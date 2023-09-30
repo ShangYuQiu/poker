@@ -3,6 +3,7 @@ package logic;
 import static java.lang.Math.abs;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -109,7 +110,7 @@ public class Evaluador {
         Jugada escalera = null;
         //Elimina los duplicados y forma una nueva lista
         Set<Carta> sinDuplicado = new LinkedHashSet<>(c);
-        ArrayList<Carta> nList = new ArrayList<>(sinDuplicado);
+        List<Carta> nList = new ArrayList<>(sinDuplicado);
 
         //Si hay 5 elem, y la diferencia del primero respecto al ultimo es de 4 => Escalera
         if (nList.size() == 5 && abs(nList.get(0).getVal() - nList.get(4).getVal()) == 4) {
@@ -198,12 +199,12 @@ public class Evaluador {
         List<Carta> frth = c.subList(2, 5); //YY-XXX
 
         //Si el trio aparece antes de la pareja 
-        if(((Trio(prim) != null) && (Pareja(sec) != null))){
+        if(((esMismoValor(prim)) && (esMismoValor(sec)))){
             String msgJugada = String.format("Full House with %s", this.mano.getStrCartas());
             fullHouse = new Jugada(c, tJugada.FULL_HOUSE, msgJugada);
         }
         //Si aparece la pareja antes del trio 
-        else if(((Pareja(thrd) != null) && (Trio(frth) != null))){
+        else if(((esMismoValor(thrd)) && (esMismoValor(frth)))){
             //Ordenar para poner el trio antes de la pareja 
             c.clear();
             c.addAll(frth);
