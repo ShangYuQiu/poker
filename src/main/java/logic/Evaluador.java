@@ -106,54 +106,74 @@ public class Evaluador {
         return escaleraColor;
     }
 
-    private Jugada auxEscalera(List<Carta> c) {
-        Jugada escalera = null;
-        //Elimina los duplicados y forma una nueva lista
-        Set<Carta> sinDuplicado = new LinkedHashSet<>(c);
-        List<Carta> nList = new ArrayList<>(sinDuplicado);
-
-        //Si hay 5 elem, y la diferencia del primero respecto al ultimo es de 4 => Escalera
-        if (nList.size() == 5 && abs(nList.get(0).getVal() - nList.get(4).getVal()) == 4) {
-            String msgJugada = String.format("Straight with %s", this.mano.getStrCartas());
-            escalera = new Jugada(c, tJugada.ESCALERA, msgJugada);
-        } //Si hay al menos 4 elem, y la diferencia del primero respecto al penultimo es de 4 => gutshot
-        else if (nList.size() >= 4 && abs(nList.get(0).getVal() - nList.get(3).getVal()) == 4) {
-            draws.add("Draw: Straight Gutshot");
-        } else if (nList.size() == 4 && abs(nList.get(0).getVal() - nList.get(3).getVal()) == 3) {
-            draws.add("Draw: Straight Open ended");
-        } else if (nList.size() == 5
-                && ((abs(nList.get(0).getVal() - nList.get(3).getVal())) == 3) || (abs(nList.get(1).getVal() - nList.get(4).getVal()) == 3)) {
-            draws.add("Draw: Straight Open ended");
-        }
-
-        return escalera;
-    }
-
     private Jugada Escalera(List<Carta> c) {
         Jugada escalera = null;
 
         //Distinguimos casos dependiendo de si la mano contiene Aces o no 
-        if (c.get(0).getSimb().equals("A")) {
-            escalera = auxEscalera(c);
-
-            //Si no se encuentra escalera con Ace como el mayor
-            if (escalera == null) {
-                //Se crea una copia de la lista 
-                List<Carta> tmp = new ArrayList<>(c);
-                for (Carta o : c) {
-                    if (o.getSimb().equals("A")) {
-                        o.setValor(1);
-                    }
-                }
-                //Se vuelve a ordenar 
-                Collections.sort(c);
-                escalera = auxEscalera(c);
-                
-                //Devolver el estado anterior de la mano
-                c = tmp;
-            }
+         List<Carta> tmp = new ArrayList<>(c);
+        if (c.get(0).getSimb().equals("A")){
+            Carta card = new Carta ("A",c.get(0).getPalo());
+            card.setValor(1);
+            tmp.add(card);
         }
-
+        int cont = 1;
+        boolean gutshot = false;
+        boolean openended = false;
+        boolean roto = false;
+        int contR = 0;
+        for ( int i = 0; i< c.size()-1;i++){
+           
+            if ( (tmp.get(i).getVal() - tmp.get(i+1).getVal()) == 1){
+                cont ++;
+            }
+           
+            //gutshot : K Q J 9 8
+            else if ((tmp.get(i).getVal() - tmp.get(i+1).getVal()) == 2){
+                roto = true;
+                contR = cont +1;
+                cont =1;
+               
+               
+               
+            }
+            else if ((tmp.get(i).getVal() - tmp.get(i+1).getVal()) > 2){
+                roto = false;
+                contR =0;
+                cont=1;
+               
+            }
+           
+            if (cont == 5){
+                String msgJugada = String.format("Straight with %s", this.mano.getStrCartas());
+                escalera = new Jugada(c, tJugada.ESCALERA, msgJugada);
+                gutshot = false;
+                roto = false;
+                openended=false;
+                contR =0;
+            }
+           
+            else if ( cont == 4){
+                openended = true;
+            }
+           
+            else if ( cont > 0 && roto && contR > 0){
+                if ( cont + contR == 5){
+                gutshot=true;
+                roto = false;
+                contR = 0;
+                }
+            }
+           
+        }
+       
+        if (openended == true){
+             draws.add("Draw: Straight Open ended");
+        }
+       
+        else if ( gutshot == true){
+            draws.add("Draw: Straight Gutshot");
+        }
+       
         return escalera;
     }
 
