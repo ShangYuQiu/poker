@@ -66,8 +66,4 @@ public class Mano {
         this.jugada = j;
     }
 
-    public void setDraw(ArrayList<String> dr) {
-        this.draws = dr;
-    }
-
 }

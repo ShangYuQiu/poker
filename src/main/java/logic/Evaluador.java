@@ -35,7 +35,7 @@ public class Evaluador {
         // pasar la jugada que ha evaluado a mano correspondiente
         if ((j = EscaleraColor(c)) != null) {
             mano.setJugada(j);
-
+            Flush(c);
         } else if ((j = Poker(c)) != null) {
             mano.setJugada(j);
         } else if ((j = FullHouse(c)) != null) {
@@ -51,12 +51,12 @@ public class Evaluador {
         } else if ((j = Pareja(c)) != null) {
             mano.setJugada(j);
         } else {
-            String msgJugada = String.format("High Card", this.mano.getStrCartas());
+            String msgJugada = String.format("High Card with %s", this.mano.getStrCartas());
             j = new Jugada(c, tJugada.CARTA_ALTA, msgJugada);
             mano.setJugada(j);
         }
 
-        mano.setDraw(draws);
+        this.mano.setDraws(draws);
 
     }
 
@@ -295,7 +295,7 @@ public class Evaluador {
     }
 
     //Devuelve la mejor doble pareja
-    private Jugada DoblePareja(ArrayList<Carta> c) {
+    private Jugada DoblePareja(List<Carta> c) {
         Jugada doblePareja = null;
 
         //Sublistas segun las posibles combinaciones
