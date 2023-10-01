@@ -140,12 +140,11 @@ public class Evaluador {
 
     private Jugada Escalera(List<Carta> c) {
         Jugada escalera = null;
-        Collections.sort(c);
-
+        Collections.sort( c);
         //Distinguimos casos dependiendo de si la mano contiene Aces o no 
-        List<Carta> tmp = new ArrayList<>(c);
-        if (c.get(0).getSimb().equals("A")) {
-            Carta card = new Carta("A", c.get(0).getPalo());
+         List<Carta> tmp = new ArrayList<>(c);
+        if (c.get(0).getSimb().equals("A")){
+            Carta card = new Carta ("A",c.get(0).getPalo());
             card.setValor(1);
             tmp.add(card);
 
@@ -157,21 +156,7 @@ public class Evaluador {
         boolean roto = false;
         boolean ace = false;
         int contR = 0;
-
-        for (int i = 0; i < c.size() - 1; i++) {
-
-            if ((tmp.get(i).getVal() - tmp.get(i + 1).getVal()) == 1) {
-                cont++;
-            } //gutshot : K Q J 9 8
-            else if ((tmp.get(i).getVal() - tmp.get(i + 1).getVal()) == 2) {
-                roto = true;
-                contR = cont + 1;
-                cont = 1;
-
-            } else if ((tmp.get(i).getVal() - tmp.get(i + 1).getVal()) > 2) {
-                roto = false;
-                contR = 0;
-                cont = 1;
+       
         
         //caso especial Ace al principio
         if (tmp.get(0).getSimb().equals("A")){
@@ -197,23 +182,22 @@ public class Evaluador {
                 contR =0;
                 cont=1;
                 ace = false;
-
             }
-
-            if (cont == 5) {
-                String msgJugada = String.format("Straight with %s", getStrCartas());
+           
+            if (cont == 5){
+                String msgJugada = String.format("Straight with %s", this.mano.getStrCartas());
+                
                 escalera = new Jugada(c, tJugada.ESCALERA, msgJugada);
                 gutshot = false;
                 roto = false;
-<<<<<<< HEAD
-                openended = false;
-=======
                 openended=false;
                 contR =0;
+                
             }
            
             else if ( cont == 4 && !ace){
                 openended = true;
+                
             }
            
             else if ( cont == 4 && ace){
@@ -223,32 +207,21 @@ public class Evaluador {
                 if ( cont + contR == 5){
                 gutshot=true;
                 roto = false;
->>>>>>> 51b9c140e89d336804a3337e11608628be5f298f
                 contR = 0;
-            } else if (cont == 4) {
-                openended = true;
-            } else if (cont > 0 && roto && contR > 0) {
-                if (cont + contR == 5) {
-                    gutshot = true;
-                    roto = false;
-                    contR = 0;
                 }
             }
-<<<<<<< HEAD
-
-=======
->>>>>>> 51b9c140e89d336804a3337e11608628be5f298f
         }
-
-        if (openended == true) {
-            addDraw("Draw: Straight Open ended");
-        } else if (gutshot == true) {
+       
+        if (openended == true){
+             addDraw("Draw: Straight Open ended");
+        }
+       
+        else if ( gutshot == true){
             addDraw("Draw: Straight Gutshot");
         }
-
+       
         return escalera;
     }
-    
 
     //Devuelve el poker si existe (Funciona)
     private Jugada Poker(List<Carta> c) {
