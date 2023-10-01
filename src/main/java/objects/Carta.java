@@ -3,8 +3,8 @@ package objects;
 public class Carta implements Comparable<Carta> {
 
     private final String simbolo; //El simbolo representativo de la carta A, K, Q ...
-    private final String palo; //Representa el palo al que pertenece la carta
-    private int valor; //Valor real representativo
+    private final String palo;    //Representa el palo al que pertenece la carta
+    private int valor;            //Valor real representativo
 
     public Carta(String simbolo, String palo) {
         this.simbolo = simbolo;
@@ -12,12 +12,6 @@ public class Carta implements Comparable<Carta> {
         init(); //Parsea la carta a su valor real referencial
     }
     
-    //Setter
-    public void setValor(int val){
-        this.valor = val;
-    }
-
-    //Metodos auxiliares
     //Parsea la carta en un valor numerico de referencia
     private void init() {
         try {
@@ -41,7 +35,7 @@ public class Carta implements Comparable<Carta> {
     }
 
     
-    //Getters y Setters
+    //Getters 
     public int getVal() {
         return valor;
     }
@@ -54,6 +48,10 @@ public class Carta implements Comparable<Carta> {
         return simbolo;
     }
 
+    //Setters
+    public void setValor(int val){
+        this.valor = val;
+    }
     
     @Override
     public int compareTo(Carta o) {
