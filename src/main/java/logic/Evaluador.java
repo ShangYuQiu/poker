@@ -278,13 +278,13 @@ public class Evaluador {
         while (i < c.size()) {
             //Contamos los palos
             switch (c.get(i).getPalo()) {
-                case "heart" ->
+                case "h" ->
                     contH++;
-                case "diamond" ->
+                case "d" ->
                     contD++;
-                case "club" ->
+                case "c" ->
                     contC++;
-                case "spade" ->
+                case "s" ->
                     contS++;
             }
 
@@ -316,18 +316,25 @@ public class Evaluador {
             ArrayList<Carta> lista = new ArrayList<>();
 
             //Recorrido en sentido inverso desde index
+
             for (int j = index; j >= 0; --j) {
+                if (c.get(j).getPalo().equals(palo)){
+                    lista.add (c.get(j));
+                }
+            }
+            
+            /*for (int j = index; j >= 0; --j) {
                 if (c.get(j).getPalo().equals(palo)) {
                     Carta tmp = c.remove(j);
                     lista.add(tmp);
                 }
-            }
-
+            }*/
+-
             //Extraen los valores de flush y los inserta al incio de la mano
-            for (int k = 0; k < 5; ++k) {
+            /*for (int k = 0; k < 5; ++k) {
                 Carta tmp = lista.remove(0);
                 c.add(0, tmp);
-            }
+            }*/
             flush = new Jugada(c, tJugada.COLOR, "Flush");
         } //No hay Flush pero si draw
         else if (contH == 4 || contD == 4 || contC == 4 || contS == 4) {
