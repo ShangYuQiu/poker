@@ -139,12 +139,8 @@ public class Evaluador {
     }
 
     private Jugada Escalera(List<Carta> c) {
-<<<<<<< HEAD
         Jugada escalera = null;
         Collections.sort(c);
-=======
-                Jugada escalera = null;
->>>>>>> 51b9c140e89d336804a3337e11608628be5f298f
 
         //Distinguimos casos dependiendo de si la mano contiene Aces o no 
         List<Carta> tmp = new ArrayList<>(c);
@@ -161,7 +157,7 @@ public class Evaluador {
         boolean roto = false;
         boolean ace = false;
         int contR = 0;
-<<<<<<< HEAD
+
         for (int i = 0; i < c.size() - 1; i++) {
 
             if ((tmp.get(i).getVal() - tmp.get(i + 1).getVal()) == 1) {
@@ -176,8 +172,6 @@ public class Evaluador {
                 roto = false;
                 contR = 0;
                 cont = 1;
-
-=======
         
         //caso especial Ace al principio
         if (tmp.get(0).getSimb().equals("A")){
@@ -203,7 +197,7 @@ public class Evaluador {
                 contR =0;
                 cont=1;
                 ace = false;
->>>>>>> 51b9c140e89d336804a3337e11608628be5f298f
+
             }
 
             if (cont == 5) {
@@ -403,7 +397,7 @@ public class Evaluador {
                     lista.add(tmp);
                 }
             }*/
--
+
             //Extraen los valores de flush y los inserta al incio de la mano
             /*for (int k = 0; k < 5; ++k) {
                 Carta tmp = lista.remove(0);
