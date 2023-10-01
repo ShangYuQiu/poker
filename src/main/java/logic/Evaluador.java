@@ -104,7 +104,7 @@ public class Evaluador {
     }
 
     private Jugada Escalera(List<Carta> c) {
-        Jugada escalera = null;
+                Jugada escalera = null;
 
         //Distinguimos casos dependiendo de si la mano contiene Aces o no 
          List<Carta> tmp = new ArrayList<>(c);
@@ -112,15 +112,23 @@ public class Evaluador {
             Carta card = new Carta ("A",c.get(0).getPalo());
             card.setValor(1);
             tmp.add(card);
-            
+
         }
+
         int cont = 1;
         boolean gutshot = false;
         boolean openended = false;
         boolean roto = false;
+        boolean ace = false;
         int contR = 0;
-        for ( int i = 0; i< c.size()-1;i++){
-           
+        
+        //caso especial Ace al principio
+        if (tmp.get(0).getSimb().equals("A")){
+            ace = true;
+        }
+        
+        for ( int i = 0; i< tmp.size()-1;i++){
+
             if ( (tmp.get(i).getVal() - tmp.get(i+1).getVal()) == 1){
                 cont ++;
             }
@@ -130,15 +138,14 @@ public class Evaluador {
                 roto = true;
                 contR = cont +1;
                 cont =1;
-               
-               
+                ace = false;
                
             }
             else if ((tmp.get(i).getVal() - tmp.get(i+1).getVal()) > 2){
                 roto = false;
                 contR =0;
                 cont=1;
-               
+                ace = false;
             }
            
             if (cont == 5){
@@ -150,18 +157,20 @@ public class Evaluador {
                 contR =0;
             }
            
-            else if ( cont == 4){
+            else if ( cont == 4 && !ace){
                 openended = true;
             }
            
-            else if ( cont > 0 && roto && contR > 0){
+            else if ( cont == 4 && ace){
+                gutshot=true;
+            }
+            else if ( cont > 0 && roto && contR > 0 ){
                 if ( cont + contR == 5){
                 gutshot=true;
                 roto = false;
                 contR = 0;
                 }
             }
-           
         }
        
         if (openended == true){
@@ -174,6 +183,7 @@ public class Evaluador {
        
         return escalera;
     }
+    
 
     //Devuelve el poker si existe (Funciona)
     private Jugada Poker(List<Carta> c) {
