@@ -139,8 +139,12 @@ public class Evaluador {
     }
 
     private Jugada Escalera(List<Carta> c) {
+<<<<<<< HEAD
         Jugada escalera = null;
         Collections.sort(c);
+=======
+                Jugada escalera = null;
+>>>>>>> 51b9c140e89d336804a3337e11608628be5f298f
 
         //Distinguimos casos dependiendo de si la mano contiene Aces o no 
         List<Carta> tmp = new ArrayList<>(c);
@@ -150,11 +154,14 @@ public class Evaluador {
             tmp.add(card);
 
         }
+
         int cont = 1;
         boolean gutshot = false;
         boolean openended = false;
         boolean roto = false;
+        boolean ace = false;
         int contR = 0;
+<<<<<<< HEAD
         for (int i = 0; i < c.size() - 1; i++) {
 
             if ((tmp.get(i).getVal() - tmp.get(i + 1).getVal()) == 1) {
@@ -170,6 +177,33 @@ public class Evaluador {
                 contR = 0;
                 cont = 1;
 
+=======
+        
+        //caso especial Ace al principio
+        if (tmp.get(0).getSimb().equals("A")){
+            ace = true;
+        }
+        
+        for ( int i = 0; i< tmp.size()-1;i++){
+
+            if ( (tmp.get(i).getVal() - tmp.get(i+1).getVal()) == 1){
+                cont ++;
+            }
+           
+            //gutshot : K Q J 9 8
+            else if ((tmp.get(i).getVal() - tmp.get(i+1).getVal()) == 2){
+                roto = true;
+                contR = cont +1;
+                cont =1;
+                ace = false;
+               
+            }
+            else if ((tmp.get(i).getVal() - tmp.get(i+1).getVal()) > 2){
+                roto = false;
+                contR =0;
+                cont=1;
+                ace = false;
+>>>>>>> 51b9c140e89d336804a3337e11608628be5f298f
             }
 
             if (cont == 5) {
@@ -177,7 +211,25 @@ public class Evaluador {
                 escalera = new Jugada(c, tJugada.ESCALERA, msgJugada);
                 gutshot = false;
                 roto = false;
+<<<<<<< HEAD
                 openended = false;
+=======
+                openended=false;
+                contR =0;
+            }
+           
+            else if ( cont == 4 && !ace){
+                openended = true;
+            }
+           
+            else if ( cont == 4 && ace){
+                gutshot=true;
+            }
+            else if ( cont > 0 && roto && contR > 0 ){
+                if ( cont + contR == 5){
+                gutshot=true;
+                roto = false;
+>>>>>>> 51b9c140e89d336804a3337e11608628be5f298f
                 contR = 0;
             } else if (cont == 4) {
                 openended = true;
@@ -188,7 +240,10 @@ public class Evaluador {
                     contR = 0;
                 }
             }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 51b9c140e89d336804a3337e11608628be5f298f
         }
 
         if (openended == true) {
@@ -199,6 +254,7 @@ public class Evaluador {
 
         return escalera;
     }
+    
 
     //Devuelve el poker si existe (Funciona)
     private Jugada Poker(List<Carta> c) {
@@ -334,18 +390,25 @@ public class Evaluador {
             ArrayList<Carta> lista = new ArrayList<>();
 
             //Recorrido en sentido inverso desde index
+
             for (int j = index; j >= 0; --j) {
+                if (c.get(j).getPalo().equals(palo)){
+                    lista.add (c.get(j));
+                }
+            }
+            
+            /*for (int j = index; j >= 0; --j) {
                 if (c.get(j).getPalo().equals(palo)) {
                     Carta tmp = c.remove(j);
                     lista.add(tmp);
                 }
-            }
-
+            }*/
+-
             //Extraen los valores de flush y los inserta al incio de la mano
-            for (int k = 0; k < 5; ++k) {
+            /*for (int k = 0; k < 5; ++k) {
                 Carta tmp = lista.remove(0);
                 c.add(0, tmp);
-            }
+            }*/
             flush = new Jugada(c, tJugada.COLOR, "Flush");
 
         } //No hay Flush pero si draw
