@@ -1,6 +1,7 @@
 package logic;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import objects.Carta;
 import objects.Jugada;
@@ -28,11 +29,14 @@ public class Evaluador {
         // pasar la jugada que ha evaluado a mano correspondiente
         if ((j = EscaleraColor(c)) != null) {
             mano.setJugada(j);
+            Escalera(c);
             Flush(c);
         } else if ((j = Poker(c)) != null) {
             mano.setJugada(j);
+            Flush(c);
         } else if ((j = FullHouse(c)) != null) {
             mano.setJugada(j);
+            Flush(c);
         } else if ((j = Flush(c)) != null) {
             mano.setJugada(j);
         } else if ((j = Escalera(c)) != null) {
@@ -95,9 +99,40 @@ public class Evaluador {
     private Jugada EscaleraColor(List<Carta> c) {
         Jugada escaleraColor = null;
 
-        if (Escalera(c) != null && esMismoPalo(c)) {
-            String msgJugada = String.format("Straight Flush with %s", this.mano.getStrCartas());
-            escaleraColor = new Jugada(c, tJugada.ESCALERA_COLOR, msgJugada);
+        int i = 0;
+        while (i < c.size()) {
+            ArrayList<Carta> tmp = new ArrayList<>(); //Lista que guarda las carta forma la escalera de color
+            tmp.add(c.get(i));  //Inserta la primera carta a partir de la cual empieza la busqueda
+            String palo = c.get(i).getPalo();   //El palo que se busca         
+            int cur = c.get(i).getVal();    //Valor de la ultima carta que se tiene para formar la jugada
+
+            int j = i + 1;
+            while (j < c.size()) {
+                //Si es del mismo valo y su diferencia vale 1
+                if (cur - c.get(j).getVal() == 1 && palo.equals(c.get(j).getPalo())) {
+                    tmp.add(0, c.get(j));   //Se inserta en la lista
+                    cur = c.get(j).getVal();    //Se actualiza el ultimo valor
+                }
+                ++j;
+            }
+
+            //Si la jugada llega a tener 5 cartas => Escalera Color
+            if (tmp.size() == 5) {
+                //Se eliminan de la mano
+                for (int k = 0; k < 5; ++k) {
+                    c.remove(tmp.get(k));   
+                }
+
+                //Se vuelven a insertar al inicio de la mano manteniendo el orden relativo
+                for (int k = 0; k < 5; ++k) {
+                    c.add(0, tmp.remove(0));
+                }
+
+                String msgJugada = String.format("Straight Flush with %s", getStrCartas());
+                escaleraColor = new Jugada(c, tJugada.ESCALERA_COLOR, msgJugada);
+                break;
+            }
+            ++i;
         }
 
         return escaleraColor;
@@ -105,79 +140,70 @@ public class Evaluador {
 
     private Jugada Escalera(List<Carta> c) {
         Jugada escalera = null;
+        Collections.sort(c);
 
         //Distinguimos casos dependiendo de si la mano contiene Aces o no 
-         List<Carta> tmp = new ArrayList<>(c);
-        if (c.get(0).getSimb().equals("A")){
-            Carta card = new Carta ("A",c.get(0).getPalo());
+        List<Carta> tmp = new ArrayList<>(c);
+        if (c.get(0).getSimb().equals("A")) {
+            Carta card = new Carta("A", c.get(0).getPalo());
             card.setValor(1);
             tmp.add(card);
-            
+
         }
         int cont = 1;
         boolean gutshot = false;
         boolean openended = false;
         boolean roto = false;
         int contR = 0;
-        for ( int i = 0; i< c.size()-1;i++){
-           
-            if ( (tmp.get(i).getVal() - tmp.get(i+1).getVal()) == 1){
-                cont ++;
-            }
-           
-            //gutshot : K Q J 9 8
-            else if ((tmp.get(i).getVal() - tmp.get(i+1).getVal()) == 2){
+        for (int i = 0; i < c.size() - 1; i++) {
+
+            if ((tmp.get(i).getVal() - tmp.get(i + 1).getVal()) == 1) {
+                cont++;
+            } //gutshot : K Q J 9 8
+            else if ((tmp.get(i).getVal() - tmp.get(i + 1).getVal()) == 2) {
                 roto = true;
-                contR = cont +1;
-                cont =1;
-               
-               
-               
-            }
-            else if ((tmp.get(i).getVal() - tmp.get(i+1).getVal()) > 2){
+                contR = cont + 1;
+                cont = 1;
+
+            } else if ((tmp.get(i).getVal() - tmp.get(i + 1).getVal()) > 2) {
                 roto = false;
-                contR =0;
-                cont=1;
-               
+                contR = 0;
+                cont = 1;
+
             }
-           
-            if (cont == 5){
-                String msgJugada = String.format("Straight with %s", this.mano.getStrCartas());
+
+            if (cont == 5) {
+                String msgJugada = String.format("Straight with %s", getStrCartas());
                 escalera = new Jugada(c, tJugada.ESCALERA, msgJugada);
                 gutshot = false;
                 roto = false;
-                openended=false;
-                contR =0;
-            }
-           
-            else if ( cont == 4){
-                openended = true;
-            }
-           
-            else if ( cont > 0 && roto && contR > 0){
-                if ( cont + contR == 5){
-                gutshot=true;
-                roto = false;
+                openended = false;
                 contR = 0;
+            } else if (cont == 4) {
+                openended = true;
+            } else if (cont > 0 && roto && contR > 0) {
+                if (cont + contR == 5) {
+                    gutshot = true;
+                    roto = false;
+                    contR = 0;
                 }
             }
-           
+
         }
-       
-        if (openended == true){
-             addDraw("Draw: Straight Open ended");
-        }
-       
-        else if ( gutshot == true){
+
+        if (openended == true) {
+            addDraw("Draw: Straight Open ended");
+        } else if (gutshot == true) {
             addDraw("Draw: Straight Gutshot");
         }
-       
+
         return escalera;
     }
 
     //Devuelve el poker si existe (Funciona)
     private Jugada Poker(List<Carta> c) {
         Jugada poker = null;
+        Collections.sort(c);
 
         int i = 0;
         int cont = 1;
@@ -186,7 +212,7 @@ public class Evaluador {
         while (i < c.size() - 1) {
             int cur = c.get(i).getVal();
             int sig = c.get(i + 1).getVal();
-            
+
             if (cur == sig) {
                 cont++;
             } else {
@@ -203,7 +229,7 @@ public class Evaluador {
                 }
 
                 //Este seria el kicker (Primero de la mano (Descendente) quitado las 4 cartas iguales)
-                Carta kicker = c.remove(0); 
+                Carta kicker = c.remove(0);
                 lista.add(0, kicker);
 
                 for (int k = 0; k < 5; k++) {
@@ -225,6 +251,7 @@ public class Evaluador {
     //Devuelve un Full House (Funciona)
     private Jugada FullHouse(List<Carta> c) {
         Jugada fullHouse = null;
+        Collections.sort(c);
 
         //Lista auxiliar que almacenan las cartas que forman el Full House
         ArrayList<Carta> lista = new ArrayList<>();
@@ -253,6 +280,7 @@ public class Evaluador {
     //Devuelve el mejor Flush (Funciona)
     private Jugada Flush(List<Carta> c) {
         Jugada flush = null;
+        Collections.sort(c);
 
         //Contador para cartas de cada palo
         int contH = 0;
@@ -268,13 +296,13 @@ public class Evaluador {
         while (i < c.size()) {
             //Contamos los palos
             switch (c.get(i).getPalo()) {
-                case "heart" ->
+                case "h" ->
                     contH++;
-                case "diamond" ->
+                case "d" ->
                     contD++;
-                case "club" ->
+                case "c" ->
                     contC++;
-                case "spade" ->
+                case "s" ->
                     contS++;
             }
 
@@ -319,6 +347,7 @@ public class Evaluador {
                 c.add(0, tmp);
             }
             flush = new Jugada(c, tJugada.COLOR, "Flush");
+
         } //No hay Flush pero si draw
         else if (contH == 4 || contD == 4 || contC == 4 || contS == 4) {
             addDraw("Draw: Flush");
@@ -330,6 +359,7 @@ public class Evaluador {
     //Devuelve el mejor trio (Funciona)
     private Jugada Trio(List<Carta> c) {
         Jugada trio = null;
+        Collections.sort(c);
         int i = 0;
         int cont = 1;   //Numero de cartas del trio actual
 
@@ -369,6 +399,7 @@ public class Evaluador {
     //Devuelve la mejor doble pareja (Funciona)
     private Jugada DoblePareja(List<Carta> c) {
         Jugada doblePareja = null;
+        Collections.sort(c);
 
         //Se busca la primera pareja
         if (Pareja(c) != null) {
@@ -383,6 +414,9 @@ public class Evaluador {
                 c.add(0, tmp);
                 String msgJugada = String.format("%s with %s ", "Two pairs", getStrCartas());
                 doblePareja = new Jugada(c, tJugada.DOBLE_PAREJA, msgJugada);
+            } else {
+                c.add(0, tmp2);
+                c.add(0, tmp);
             }
         }
         return doblePareja;
@@ -391,6 +425,7 @@ public class Evaluador {
     //Devuelve la mejor pareja (Funciona)
     private Jugada Pareja(List<Carta> c) {
         Jugada pareja = null;
+        Collections.sort(c);
 
         int i = 0;
         while (i < c.size() - 1) {

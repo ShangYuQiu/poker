@@ -1,2 +1,3 @@
-- Best Hand: Straight with AhAcQhJhTh
+- Best Hand: Pair of Ases with AhAcQhJhTh
 - Draw: Flush
+- Draw: Straight Gutshot

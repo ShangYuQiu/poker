@@ -33,7 +33,7 @@ public class Mano {
                 strCartas.append(c.getSimb()).append(c.getPalo());
             }
         }
-        return strCartas.toString();
+        return strCartas.toString().substring(0,10);
     }
 
     //Devuelve la mano pero ordenado si no lo estaba (Descendente)
