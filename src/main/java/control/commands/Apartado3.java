@@ -40,14 +40,15 @@ public class Apartado3 {
             
             while ((card = in.readLine()) != null) {
                 String carta[]=card.split(";");
-                j=Integer.parseInt(carta[0]);
+                j=Integer.parseInt(carta[0]);//numero del jugador
                 for(int k=0;k<j;k++){
                     Mano m = new Mano();
+                    //carta propia de cada jugador
                     for (int i = 2; i < carta[k+1].length(); i += 2) {
                         Carta c = new Carta(carta[k+1].substring(i, i + 1), carta[k+1].substring(i + 1, i + 2));
                         m.agregarCarta(c);
                     }
-               
+                    //carta comun
                     for (int i = 0; i < carta[j+1].length(); i += 2) {
                     Carta c = new Carta(carta[j+1].substring(i, i + 1), carta[j+1].substring(i + 1, i + 2));
                     m.agregarCarta(c);
@@ -61,6 +62,7 @@ public class Apartado3 {
                 //salida
                 FileWriter f_salida = new FileWriter(salida, true);
                 try (BufferedWriter writer = new BufferedWriter(f_salida)) {
+                    //salida por orden de jugador con las cartas de mayor a menor
                     for(int i=tipo.length-1;i>=0;i--){
                         for(int m=0;m<palo.length;m++){
                             for(String k: jugador.keySet()){
