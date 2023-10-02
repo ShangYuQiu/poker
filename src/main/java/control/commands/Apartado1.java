@@ -15,7 +15,6 @@ public class Apartado1 {
 
     private final String entrada;
     private final String salida;
-    private Mano mano;
     private Evaluador ev;
 
     public Apartado1(String entra, String sal) {
@@ -48,18 +47,16 @@ public class Apartado1 {
                 try (//salida
                         BufferedWriter writer = new BufferedWriter(f_salida)) {
                     writer.append("- Best Hand: ");
-                    //solucion
                     writer.append(m.getJugada().getDescripcion());
                     writer.newLine();
-                    //if es Straight Gutshot
                     for (String s : m.getDraws()) {
                         writer.append("- " + s);
                         writer.newLine();
                     }
-
                     writer.close();
                 }
             }
+            in.close();
         } catch (IOException e) {
             System.out.print(e);
         }
