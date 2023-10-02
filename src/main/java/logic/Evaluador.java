@@ -294,8 +294,11 @@ public class Evaluador {
                 }
                 String msgJugada = String.format("Full House with %s", getStrCartas());
                 fullHouse = new Jugada(c, tJugada.FULL_HOUSE, msgJugada);
+            }else{
+                c.add(0,lista.remove(0));
+                c.add(0,lista.remove(0));
+                c.add(0,lista.remove(0));
             }
-
         }
         return fullHouse;
     }
