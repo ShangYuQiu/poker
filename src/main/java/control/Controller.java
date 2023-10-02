@@ -1,7 +1,8 @@
 package control;
 
 import control.commands.Apartado1;
-
+import control.commands.Apartado2;
+import control.commands.Apartado3;
 public class Controller {
 
     private final String entrada;
@@ -20,10 +21,15 @@ public class Controller {
                 apartado1.execute();
             }
             case 2 -> {
+                Apartado2 apartado2 = new Apartado2(entrada, salida);
+                apartado2.execute();
             }
             case 3 -> {
+                Apartado3 apartado3 = new Apartado3(entrada, salida);
+                apartado3.execute();
             }
             default -> {
+                System.out.println("Primer argumento introducido debe ser entre 1 y 3.");
             }
         }
     }
