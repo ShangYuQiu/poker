@@ -14,11 +14,12 @@ public class Apartado2 {
 
     private final String entrada;
     private final String salida;
+    private Evaluador ev;
 
     public Apartado2(String entra, String sal) {
         this.entrada = entra;
         this.salida = sal;
-
+        
     }
 
     public void execute() {
@@ -48,7 +49,7 @@ public class Apartado2 {
                 this.ev = new Evaluador();
                 ev.setMano(m);
                 ev.evaluar();
-                }
+                
                 FileWriter f_salida = new FileWriter(salida, true);
                 try (//salida
                         BufferedWriter writer = new BufferedWriter(f_salida)) {
