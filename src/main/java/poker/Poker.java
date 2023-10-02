@@ -13,7 +13,7 @@ public class Poker {
             case "2" -> controller.run(2);
             case "3" -> controller.run(3);
             default -> {
-                //Lanzar una excepcion o algo 
+                System.out.println("Primer argumento introducido debe ser entre 1 y 3.");
             }
         }
     }
