@@ -46,6 +46,8 @@ public class Apartado1 {
 
                 try (//salida
                         BufferedWriter writer = new BufferedWriter(f_salida)) {
+                    writer.append(carta);
+                    writer.newLine();
                     writer.append("- Best Hand: ");
                     writer.append(m.getJugada().getDescripcion());
                     writer.newLine();
