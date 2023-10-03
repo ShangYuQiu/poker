@@ -150,61 +150,50 @@ public class Evaluador {
 
         }
 
-        int cont = 1;
-        boolean gutshot = false;
+        int cont = 1; // contador = num elemento de escalera
+        boolean gutshot = false; 
         boolean openended = false;
-        boolean roto = false;
-        boolean ace = false;
-        int contR = 0;
-       
-        
-        //caso especial Ace al principio
-        if (tmp.get(0).getSimb().equals("A")){
-            ace = true;
-        }
+        boolean roto = false; // booleano = true cuando puede haber posibilidad de un gutshot
+        int contR = 0; // valor auxiliar para conservar el cont anterior cuando se rompe la escalera (si hay posibilidad de gutshot)
         
         for ( int i = 0; i< tmp.size()-1;i++){
 
-            if ( (tmp.get(i).getVal() - tmp.get(i+1).getVal()) == 1){
+            int cur = tmp.get(i).getVal();
+            int sig = tmp.get(i+1).getVal();
+
+            if (cur - sig == 1){
                 cont ++;
-            }
-           
-            //gutshot : K Q J 9 8
-            else if ((tmp.get(i).getVal() - tmp.get(i+1).getVal()) == 2){
+            }           
+            //gutshot : K Q J 9 8 / K J T 9 5 / K Q T 9 5
+            else if (cur - sig == 2){ //posible gutshot
                 roto = true;
-                contR = cont +1;
+                contR = cont +1; // suma 1 al contador antes de que se haga reset 
                 cont =1;
                 ace = false;
                
             }
-            else if ((tmp.get(i).getVal() - tmp.get(i+1).getVal()) > 2){
+            else if (cur - sig > 2){ // la resta es mayor 2 -> no va a formar nada
                 roto = false;
                 contR =0;
                 cont=1;
                 ace = false;
             }
            
-            if (cont == 5){
+            if (cont == 5){ // escalera
                 String msgJugada = String.format("Straight with %s", this.mano.getStrCartas());
                 
                 escalera = new Jugada(c, tJugada.ESCALERA, msgJugada);
                 gutshot = false;
                 roto = false;
                 openended=false;
-                contR =0;
-                
-            }
-           
-            else if ( cont == 4 && !ace){
+                contR =0;                
+            }       
+            else if (cont == 4 ){
                 openended = true;
                 
-            }
-           
-            else if ( cont == 4 && ace){
-                gutshot=true;
-            }
-            else if ( cont > 0 && roto && contR > 0 ){
-                if ( cont + contR == 5){
+            }           
+            else if (cont > 0 && roto && contR > 0 ){
+                if (cont + contR == 5){
                 gutshot=true;
                 roto = false;
                 contR = 0;
@@ -214,9 +203,8 @@ public class Evaluador {
        
         if (openended == true){
              addDraw("Draw: Straight Open ended");
-        }
-       
-        else if ( gutshot == true){
+        }       
+        else if (gutshot == true){
             addDraw("Draw: Straight Gutshot");
         }
        
