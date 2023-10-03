@@ -33,38 +33,68 @@ public class Apartado4 {
             FileInputStream fis = new FileInputStream(f);
             InputStreamReader fr = new InputStreamReader(fis);
             BufferedReader in = new BufferedReader(fr);
-            
-            String card;
             int n;
-            
+            String card;
             while ((card = in.readLine()) != null) {
                 String carta[]=card.split(";");
-                for(int j=0;j<4*2;j+=4){
-                    int cont=0;
-                    Mano m = new Mano();
-                    //carta propia de cada jugador
-                    for (int i = j; i < carta[0].length(); i += 2) {
-                        Carta c = new Carta(carta[0].substring(i, i + 1), carta[0].substring(i + 1, i + 2));
-                        m.agregarCarta(c);
-                        cont++;
-                        
+                n=Integer.parseInt(carta[1]);
+                    int s=0;
+                    int j=2;
+                    
+                    while(s<=4){
+                        int a=0;
+                        int b=2;
+                        int d=4;
+                        while(a<=n-1){
+                            Mano m = new Mano();
+                            //dos cartas propias
+                            Carta c = new Carta(carta[0].substring(s, s + 1), carta[0].substring(s + 1, s + 2));
+                            m.agregarCarta(c);
+                            c = new Carta(carta[0].substring(j, j + 1), carta[0].substring(j + 1, j + 2));
+                            m.agregarCarta(c);
+                            if(n==3){
+                                for (int k = 0; k < carta[2].length(); k += 2) {
+                                    c = new Carta(carta[2].substring(k, k + 1), carta[2].substring(k + 1, k + 2));
+                                    m.agregarCarta(c);
+                                }
+                                a=n;
+                            }else{
+                                //tres cartas comunes
+                                c = new Carta(carta[2].substring(a, a + 1), carta[2].substring(a + 1, a + 2));
+                                m.agregarCarta(c);
+                                c = new Carta(carta[2].substring(b, b + 1), carta[2].substring(b + 1, b + 2));
+                                m.agregarCarta(c);
+                                c = new Carta(carta[2].substring(d, d + 1), carta[2].substring(d + 1, d + 2));
+                                m.agregarCarta(c);
+                                
+                                d+=2;
+                                if(d>=n*2){
+                                    b+=2;
+                                    d=b+2;
+                                    if(b>n+1){
+                                    a+=2;
+                                    b=a+2;
+                                    d=b+2;
+                                    }
+                                }
+                                
+                            }
+                            this.ev = new Evaluador();
+                            ev.setMano(m);
+                            ev.evaluar();
+                            listaCarta.add(m.getJugada());
+                        }
+                        j+=2;
+                        if(j>=8){
+                            s+=2;
+                            j=s+2;
+                        }
                     }
-                    n=Integer.parseInt(carta[1]);
-                    //carta comun
-                    for (int i = 0; i < carta[2].length()&&cont<5; i += 2) {
-                    Carta c = new Carta(carta[2].substring(i, i + 1), carta[2].substring(i + 1, i + 2));
-                    m.agregarCarta(c);
-                    cont++;
-                    }
-                    this.ev = new Evaluador();
-                    ev.setMano(m);
-                    ev.evaluar();
-                    listaCarta.add(m.getJugada());
-                }
+                
                 //salida
                 FileWriter f_salida = new FileWriter(salida, true);
                 try (BufferedWriter writer = new BufferedWriter(f_salida)) {
-                    //salida por orden de jugador con las cartas de mayor a menor
+                    //salida mayor carta
                     writer.append(card);
                     writer.newLine();
                     writer.append("-Best hand: ");
@@ -82,6 +112,7 @@ public class Apartado4 {
                         }
                     }
                   writer.close();
+                
                 }
             }
             in.close();
@@ -92,3 +123,4 @@ public class Apartado4 {
     }
 
 }
+
