@@ -153,6 +153,7 @@ public class Evaluador {
         int cont = 1; // contador = num elemento de escalera
         boolean gutshot = false; 
         boolean openended = false;
+        boolean ace =false;
         boolean roto = false; // booleano = true cuando puede haber posibilidad de un gutshot
         int contR = 0; // valor auxiliar para conservar el cont anterior cuando se rompe la escalera (si hay posibilidad de gutshot)
         
