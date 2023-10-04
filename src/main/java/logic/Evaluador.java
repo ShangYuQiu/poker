@@ -184,17 +184,17 @@ public class Evaluador {
                 String msgJugada = String.format("Straight with %s", this.mano.getStrCartas());
                 
                 escalera = new Jugada(c, tJugada.ESCALERA, msgJugada);
-                gutshot = false;
+                gutshot = false; 
                 roto = false;
-                openended=false;
+                openended=false; // -> no habra openended
                 contR =0;                
             }       
-            else if (cont == 4 ){
+            else if (cont == 4 ){ // 4 elem de escalera -> openended 
                 openended = true;
                 
             }           
-            else if (cont > 0 && roto && contR > 0 ){
-                if (cont + contR == 5){
+            else if (cont > 0 && roto && contR > 0 ){ // caso gutshot
+                if (cont + contR == 5){ // cont actual + valor aux de cont antes de romper la escalera == 5 -> gutshot
                 gutshot=true;
                 roto = false;
                 contR = 0;
