@@ -23,7 +23,6 @@ public class Apartado3 {
     public Apartado3(String entra, String sal) {
         this.entrada = entra;
         this.salida = sal;
-        this.jugador=new HashMap<String, Jugada>();
     }
 
     public void execute() {
@@ -40,6 +39,7 @@ public class Apartado3 {
             
             while ((card = in.readLine()) != null) {
                 String carta[]=card.split(";");
+                this.jugador=new HashMap<String, Jugada>();
                 j=Integer.parseInt(carta[0]);//numero del jugador
                 for(int k=0;k<j;k++){
                     Mano m = new Mano();
