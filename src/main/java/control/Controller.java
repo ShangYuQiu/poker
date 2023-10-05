@@ -34,7 +34,7 @@ public class Controller {
                 apartado4.execute();
             }
             default -> {
-                System.out.println("Primer argumento introducido debe ser entre 1 y 3.");
+                System.out.println("Primer argumento introducido debe ser entre 1 y 4.");
             }
         }
     }
