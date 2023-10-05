@@ -19,7 +19,7 @@ public class Apartado4 {
     private Evaluador ev;
     private ArrayList<Jugada> listaCarta;
     private final String tipo[]={"CARTA_ALTA", "PAREJA", "DOBLE_PAREJA", "TRIO", "ESCALERA", "COLOR", "FULL_HOUSE", "POKER", "ESCALERA_COLOR"};
-    private final String palo[]={"A","K","Q","J","T","9","8","7","6","5","4","3","2"};
+    private final String simb[]={"A","K","Q","J","T","9","8","7","6","5","4","3","2"};
     public Apartado4(String entra, String sal) {
         this.entrada = entra;
         this.salida = sal;
@@ -45,19 +45,20 @@ public class Apartado4 {
                         int a=0;
                         int b=2;
                         int d=4;
-                        while(a<=n-1){
+                        boolean continu=true;//si num cartas comunes es mayor que 3 continu=true 
+                        while(a<((n*2)-(2*2))&&continu){
                             Mano m = new Mano();
                             //dos cartas propias
                             Carta c = new Carta(carta[0].substring(s, s + 1), carta[0].substring(s + 1, s + 2));
                             m.agregarCarta(c);
                             c = new Carta(carta[0].substring(j, j + 1), carta[0].substring(j + 1, j + 2));
                             m.agregarCarta(c);
-                            if(n==3){
+                            if(n==3){//si solo hay tres cartas comunes
+                                continu=false;//num cartas comunes=3
                                 for (int k = 0; k < carta[2].length(); k += 2) {
                                     c = new Carta(carta[2].substring(k, k + 1), carta[2].substring(k + 1, k + 2));
                                     m.agregarCarta(c);
                                 }
-                                a=n;
                             }else{
                                 //tres cartas comunes
                                 c = new Carta(carta[2].substring(a, a + 1), carta[2].substring(a + 1, a + 2));
@@ -68,11 +69,11 @@ public class Apartado4 {
                                 m.agregarCarta(c);
                                 
                                 d+=2;
-                                if(d>=n*2){
-                                    b+=2;
+                                if(d>=n*2){//si es la ultima carta
+                                    b+=2;//pasa a siguente carta
                                     d=b+2;
-                                    if(b>n+1){
-                                    a+=2;
+                                    if(b>=(n*2)-2){//si es la penultima carta
+                                    a+=2;//pasa a siguente carta
                                     b=a+2;
                                     d=b+2;
                                     }
@@ -83,6 +84,7 @@ public class Apartado4 {
                             ev.setMano(m);
                             ev.evaluar();
                             listaCarta.add(m.getJugada());
+                            
                         }
                         j+=2;
                         if(j>=8){
@@ -90,7 +92,6 @@ public class Apartado4 {
                             j=s+2;
                         }
                     }
-                
                 //salida
                 FileWriter f_salida = new FileWriter(salida, true);
                 try (BufferedWriter writer = new BufferedWriter(f_salida)) {
@@ -100,9 +101,9 @@ public class Apartado4 {
                     writer.append("-Best hand: ");
                     boolean continuar=true;
                     for(int i=tipo.length-1;i>=0&&continuar;i--){
-                        for(int m=0;m<palo.length&&continuar;m++){
+                        for(int m=0;m<simb.length&&continuar;m++){
                             for(int k=0;k<listaCarta.size()&&continuar;k++){
-                                if((listaCarta.get(k).getCadCartas().substring(0, 1).equalsIgnoreCase(palo[m]))&&
+                                if((listaCarta.get(k).getCadCartas().substring(0, 1).equalsIgnoreCase(simb[m]))&&
                                         (listaCarta.get(k).getJugada().toString().equalsIgnoreCase(tipo[i]))&&continuar){
                                     writer.append(listaCarta.get(k).getDescripcion());
                                     writer.newLine();
@@ -123,4 +124,3 @@ public class Apartado4 {
     }
 
 }
-
