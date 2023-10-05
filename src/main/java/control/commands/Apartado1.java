@@ -30,7 +30,6 @@ public class Apartado1 {
             FileInputStream fis = new FileInputStream(f);
             InputStreamReader fr = new InputStreamReader(fis);
             BufferedReader in = new BufferedReader(fr);
-            FileWriter f_salida = new FileWriter(salida, true);
             String carta;
             while ((carta = in.readLine()) != null) {
 
@@ -43,7 +42,7 @@ public class Apartado1 {
                 this.ev = new Evaluador();
                 ev.setMano(m);
                 ev.evaluar();
-
+                FileWriter f_salida = new FileWriter(salida, true);
                 try (//salida
                         BufferedWriter writer = new BufferedWriter(f_salida)) {
                     writer.append(carta);
